@@ -133,4 +133,5 @@ public class Usuario implements Serializable {
         return "Modelo.Usuario[ idUsuario=" + idUsuario + " ]";
     }
     
+    
 }

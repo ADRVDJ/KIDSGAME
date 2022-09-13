@@ -5,6 +5,10 @@
  */
 package Vista;
 
+import javax.swing.JButton;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
 /**
  *
  * @author ASUS TUF GAMING
@@ -17,6 +21,47 @@ public class viewLogindatos extends javax.swing.JFrame {
     public viewLogindatos() {
         initComponents();
     }
+
+    public JButton getBt_iniciar() {
+        return bt_iniciar;
+    }
+
+    public void setBt_iniciar(JButton bt_iniciar) {
+        this.bt_iniciar = bt_iniciar;
+    }
+
+    public JButton getBt_registrarse() {
+        return bt_registrarse;
+    }
+
+    public void setBt_registrarse(JButton bt_registrarse) {
+        this.bt_registrarse = bt_registrarse;
+    }
+
+    public JButton getBt_salir() {
+        return bt_salir;
+    }
+
+    public void setBt_salir(JButton bt_salir) {
+        this.bt_salir = bt_salir;
+    }
+   
+    public JTextField getTxtusuarioLogin() {
+        return txtusuarioLogin;
+    }
+
+    public void setTxtusuarioLogin(JTextField txtusuarioLogin) {
+        this.txtusuarioLogin = txtusuarioLogin;
+    }
+
+    public JPasswordField getTxtcontraseñaLogin() {
+        return txtcontraseñaLogin;
+    }
+
+    public void setTxtcontraseñaLogin(JPasswordField txtcontraseñaLogin) {
+        this.txtcontraseñaLogin = txtcontraseñaLogin;
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -32,15 +77,14 @@ public class viewLogindatos extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txtusuarioLogin = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
-        txtcontraseñaLogin = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        bt_iniciar = new javax.swing.JButton();
+        bt_registrarse = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        txtcontraseñaLogin1 = new javax.swing.JTextField();
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
+        txtcontraseñaLogin = new javax.swing.JPasswordField();
         jPanel1 = new javax.swing.JPanel();
-        jButton4 = new javax.swing.JButton();
+        bt_salir = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -71,38 +115,22 @@ public class viewLogindatos extends javax.swing.JFrame {
         jSeparator1.setForeground(new java.awt.Color(255, 255, 255));
         jPanel2.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, 340, 20));
 
-        txtcontraseñaLogin.setBackground(new java.awt.Color(1, 190, 255));
-        txtcontraseñaLogin.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        txtcontraseñaLogin.setForeground(new java.awt.Color(0, 0, 0));
-        txtcontraseñaLogin.setText("Contraseña");
-        txtcontraseñaLogin.setToolTipText("");
-        txtcontraseñaLogin.setBorder(null);
-        jPanel2.add(txtcontraseñaLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 410, 349, 20));
+        bt_iniciar.setBackground(new java.awt.Color(255, 153, 153));
+        bt_iniciar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        bt_iniciar.setForeground(new java.awt.Color(255, 255, 255));
+        bt_iniciar.setText("INICIAR SESIÓN");
+        bt_iniciar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel2.add(bt_iniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 470, 290, 40));
 
-        jButton1.setBackground(new java.awt.Color(255, 153, 153));
-        jButton1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("INICIAR SESIÓN");
-        jButton1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 470, 290, 40));
-
-        jButton2.setBackground(new java.awt.Color(255, 153, 153));
-        jButton2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("REGISTRARSE");
-        jButton2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 540, 130, 30));
+        bt_registrarse.setBackground(new java.awt.Color(255, 153, 153));
+        bt_registrarse.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        bt_registrarse.setForeground(new java.awt.Color(255, 255, 255));
+        bt_registrarse.setText("REGISTRARSE");
+        bt_registrarse.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel2.add(bt_registrarse, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 540, 130, 30));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/TIUTLOLETRAS2.png"))); // NOI18N
         jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, 400, 90));
-
-        txtcontraseñaLogin1.setBackground(new java.awt.Color(1, 190, 255));
-        txtcontraseñaLogin1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        txtcontraseñaLogin1.setForeground(new java.awt.Color(0, 0, 0));
-        txtcontraseñaLogin1.setText("Contraseña");
-        txtcontraseñaLogin1.setToolTipText("");
-        txtcontraseñaLogin1.setBorder(null);
-        jPanel2.add(txtcontraseñaLogin1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 410, 349, 20));
 
         jSeparator3.setBackground(new java.awt.Color(255, 255, 255));
         jSeparator3.setForeground(new java.awt.Color(255, 255, 255));
@@ -112,17 +140,23 @@ public class viewLogindatos extends javax.swing.JFrame {
         jSeparator4.setForeground(new java.awt.Color(255, 255, 255));
         jPanel2.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 520, 340, 20));
 
+        txtcontraseñaLogin.setBackground(new java.awt.Color(1, 190, 255));
+        txtcontraseñaLogin.setForeground(new java.awt.Color(0, 0, 0));
+        txtcontraseñaLogin.setText("jPasswordField1");
+        txtcontraseñaLogin.setBorder(null);
+        jPanel2.add(txtcontraseñaLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 400, 340, 30));
+
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 530, 700));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton4.setBackground(new java.awt.Color(255, 153, 153));
-        jButton4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cross-small-free-icon-font.png"))); // NOI18N
-        jButton4.setText("SALIR");
-        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 30, -1, -1));
+        bt_salir.setBackground(new java.awt.Color(255, 153, 153));
+        bt_salir.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        bt_salir.setForeground(new java.awt.Color(255, 255, 255));
+        bt_salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cross-small-free-icon-font.png"))); // NOI18N
+        bt_salir.setText("SALIR");
+        jPanel1.add(bt_salir, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 30, -1, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/NutriaLogo.png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -168,9 +202,9 @@ public class viewLogindatos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton bt_iniciar;
+    private javax.swing.JButton bt_registrarse;
+    private javax.swing.JButton bt_salir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -180,8 +214,7 @@ public class viewLogindatos extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JTextField txtcontraseñaLogin;
-    private javax.swing.JTextField txtcontraseñaLogin1;
+    private javax.swing.JPasswordField txtcontraseñaLogin;
     private javax.swing.JTextField txtusuarioLogin;
     // End of variables declaration//GEN-END:variables
 }

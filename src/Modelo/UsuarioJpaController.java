@@ -222,4 +222,13 @@ public class UsuarioJpaController implements Serializable {
         }
     }
     
+    public Usuario buscarByCredenciales(String us, String pasw, String rol) {
+        Usuario u = null;
+        for (Usuario usuario : findUsuarioEntities()) {
+            if (usuario.getUsUsuario().equals(us) && usuario.getUsContraseña().equals(pasw) && usuario.getIdRol().equals(rol)) {
+                u = usuario;
+            }
+        }
+        return u;
+    }
 }
