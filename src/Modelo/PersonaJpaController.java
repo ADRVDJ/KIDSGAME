@@ -5,7 +5,6 @@
  */
 package Modelo;
 
-import Modelo.exceptions.IllegalOrphanException;
 import Modelo.exceptions.NonexistentEntityException;
 import Modelo.exceptions.PreexistingEntityException;
 import java.io.Serializable;
@@ -34,58 +33,39 @@ public class PersonaJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Persona persona) throws IllegalOrphanException, PreexistingEntityException, Exception {
+    public void create(Persona persona) throws PreexistingEntityException, Exception {
         if (persona.getPuntajeCuestionarioList() == null) {
             persona.setPuntajeCuestionarioList(new ArrayList<PuntajeCuestionario>());
         }
-        List<String> illegalOrphanMessages = null;
-        Usuario usuarioOrphanCheck = persona.getUsuario();
-        if (usuarioOrphanCheck != null) {
-            Persona oldPersonaOfUsuario = usuarioOrphanCheck.getPersona();
-            if (oldPersonaOfUsuario != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("The Usuario " + usuarioOrphanCheck + " already has an item of type Persona whose usuario column cannot be null. Please make another selection for the usuario field.");
-            }
+        if (persona.getPersonaAsignaturaList() == null) {
+            persona.setPersonaAsignaturaList(new ArrayList<PersonaAsignatura>());
         }
-        if (illegalOrphanMessages != null) {
-            throw new IllegalOrphanException(illegalOrphanMessages);
+        if (persona.getUsuarioList() == null) {
+            persona.setUsuarioList(new ArrayList<Usuario>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Usuario usuario = persona.getUsuario();
-            if (usuario != null) {
-                usuario = em.getReference(usuario.getClass(), usuario.getIdUsuario());
-                persona.setUsuario(usuario);
-            }
-            PersonaAsignatura personaAsignatura = persona.getPersonaAsignatura();
-            if (personaAsignatura != null) {
-                personaAsignatura = em.getReference(personaAsignatura.getClass(), personaAsignatura.getIdUsuarioA());
-                persona.setPersonaAsignatura(personaAsignatura);
-            }
             List<PuntajeCuestionario> attachedPuntajeCuestionarioList = new ArrayList<PuntajeCuestionario>();
             for (PuntajeCuestionario puntajeCuestionarioListPuntajeCuestionarioToAttach : persona.getPuntajeCuestionarioList()) {
                 puntajeCuestionarioListPuntajeCuestionarioToAttach = em.getReference(puntajeCuestionarioListPuntajeCuestionarioToAttach.getClass(), puntajeCuestionarioListPuntajeCuestionarioToAttach.getIdPuntaje());
                 attachedPuntajeCuestionarioList.add(puntajeCuestionarioListPuntajeCuestionarioToAttach);
             }
             persona.setPuntajeCuestionarioList(attachedPuntajeCuestionarioList);
+            List<PersonaAsignatura> attachedPersonaAsignaturaList = new ArrayList<PersonaAsignatura>();
+            for (PersonaAsignatura personaAsignaturaListPersonaAsignaturaToAttach : persona.getPersonaAsignaturaList()) {
+                personaAsignaturaListPersonaAsignaturaToAttach = em.getReference(personaAsignaturaListPersonaAsignaturaToAttach.getClass(), personaAsignaturaListPersonaAsignaturaToAttach.getIdPersonaA());
+                attachedPersonaAsignaturaList.add(personaAsignaturaListPersonaAsignaturaToAttach);
+            }
+            persona.setPersonaAsignaturaList(attachedPersonaAsignaturaList);
+            List<Usuario> attachedUsuarioList = new ArrayList<Usuario>();
+            for (Usuario usuarioListUsuarioToAttach : persona.getUsuarioList()) {
+                usuarioListUsuarioToAttach = em.getReference(usuarioListUsuarioToAttach.getClass(), usuarioListUsuarioToAttach.getIdUsuario());
+                attachedUsuarioList.add(usuarioListUsuarioToAttach);
+            }
+            persona.setUsuarioList(attachedUsuarioList);
             em.persist(persona);
-            if (usuario != null) {
-                usuario.setPersona(persona);
-                usuario = em.merge(usuario);
-            }
-            if (personaAsignatura != null) {
-                Persona oldPersonaOfPersonaAsignatura = personaAsignatura.getPersona();
-                if (oldPersonaOfPersonaAsignatura != null) {
-                    oldPersonaOfPersonaAsignatura.setPersonaAsignatura(null);
-                    oldPersonaOfPersonaAsignatura = em.merge(oldPersonaOfPersonaAsignatura);
-                }
-                personaAsignatura.setPersona(persona);
-                personaAsignatura = em.merge(personaAsignatura);
-            }
             for (PuntajeCuestionario puntajeCuestionarioListPuntajeCuestionario : persona.getPuntajeCuestionarioList()) {
                 Persona oldPcIdPersonaOfPuntajeCuestionarioListPuntajeCuestionario = puntajeCuestionarioListPuntajeCuestionario.getPcIdPersona();
                 puntajeCuestionarioListPuntajeCuestionario.setPcIdPersona(persona);
@@ -93,6 +73,24 @@ public class PersonaJpaController implements Serializable {
                 if (oldPcIdPersonaOfPuntajeCuestionarioListPuntajeCuestionario != null) {
                     oldPcIdPersonaOfPuntajeCuestionarioListPuntajeCuestionario.getPuntajeCuestionarioList().remove(puntajeCuestionarioListPuntajeCuestionario);
                     oldPcIdPersonaOfPuntajeCuestionarioListPuntajeCuestionario = em.merge(oldPcIdPersonaOfPuntajeCuestionarioListPuntajeCuestionario);
+                }
+            }
+            for (PersonaAsignatura personaAsignaturaListPersonaAsignatura : persona.getPersonaAsignaturaList()) {
+                Persona oldPaIdPersonaOfPersonaAsignaturaListPersonaAsignatura = personaAsignaturaListPersonaAsignatura.getPaIdPersona();
+                personaAsignaturaListPersonaAsignatura.setPaIdPersona(persona);
+                personaAsignaturaListPersonaAsignatura = em.merge(personaAsignaturaListPersonaAsignatura);
+                if (oldPaIdPersonaOfPersonaAsignaturaListPersonaAsignatura != null) {
+                    oldPaIdPersonaOfPersonaAsignaturaListPersonaAsignatura.getPersonaAsignaturaList().remove(personaAsignaturaListPersonaAsignatura);
+                    oldPaIdPersonaOfPersonaAsignaturaListPersonaAsignatura = em.merge(oldPaIdPersonaOfPersonaAsignaturaListPersonaAsignatura);
+                }
+            }
+            for (Usuario usuarioListUsuario : persona.getUsuarioList()) {
+                Persona oldUsIdPersonaOfUsuarioListUsuario = usuarioListUsuario.getUsIdPersona();
+                usuarioListUsuario.setUsIdPersona(persona);
+                usuarioListUsuario = em.merge(usuarioListUsuario);
+                if (oldUsIdPersonaOfUsuarioListUsuario != null) {
+                    oldUsIdPersonaOfUsuarioListUsuario.getUsuarioList().remove(usuarioListUsuario);
+                    oldUsIdPersonaOfUsuarioListUsuario = em.merge(oldUsIdPersonaOfUsuarioListUsuario);
                 }
             }
             em.getTransaction().commit();
@@ -108,45 +106,18 @@ public class PersonaJpaController implements Serializable {
         }
     }
 
-    public void edit(Persona persona) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Persona persona) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             Persona persistentPersona = em.find(Persona.class, persona.getIdPersona());
-            Usuario usuarioOld = persistentPersona.getUsuario();
-            Usuario usuarioNew = persona.getUsuario();
-            PersonaAsignatura personaAsignaturaOld = persistentPersona.getPersonaAsignatura();
-            PersonaAsignatura personaAsignaturaNew = persona.getPersonaAsignatura();
             List<PuntajeCuestionario> puntajeCuestionarioListOld = persistentPersona.getPuntajeCuestionarioList();
             List<PuntajeCuestionario> puntajeCuestionarioListNew = persona.getPuntajeCuestionarioList();
-            List<String> illegalOrphanMessages = null;
-            if (usuarioNew != null && !usuarioNew.equals(usuarioOld)) {
-                Persona oldPersonaOfUsuario = usuarioNew.getPersona();
-                if (oldPersonaOfUsuario != null) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("The Usuario " + usuarioNew + " already has an item of type Persona whose usuario column cannot be null. Please make another selection for the usuario field.");
-                }
-            }
-            if (personaAsignaturaOld != null && !personaAsignaturaOld.equals(personaAsignaturaNew)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("You must retain PersonaAsignatura " + personaAsignaturaOld + " since its persona field is not nullable.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            if (usuarioNew != null) {
-                usuarioNew = em.getReference(usuarioNew.getClass(), usuarioNew.getIdUsuario());
-                persona.setUsuario(usuarioNew);
-            }
-            if (personaAsignaturaNew != null) {
-                personaAsignaturaNew = em.getReference(personaAsignaturaNew.getClass(), personaAsignaturaNew.getIdUsuarioA());
-                persona.setPersonaAsignatura(personaAsignaturaNew);
-            }
+            List<PersonaAsignatura> personaAsignaturaListOld = persistentPersona.getPersonaAsignaturaList();
+            List<PersonaAsignatura> personaAsignaturaListNew = persona.getPersonaAsignaturaList();
+            List<Usuario> usuarioListOld = persistentPersona.getUsuarioList();
+            List<Usuario> usuarioListNew = persona.getUsuarioList();
             List<PuntajeCuestionario> attachedPuntajeCuestionarioListNew = new ArrayList<PuntajeCuestionario>();
             for (PuntajeCuestionario puntajeCuestionarioListNewPuntajeCuestionarioToAttach : puntajeCuestionarioListNew) {
                 puntajeCuestionarioListNewPuntajeCuestionarioToAttach = em.getReference(puntajeCuestionarioListNewPuntajeCuestionarioToAttach.getClass(), puntajeCuestionarioListNewPuntajeCuestionarioToAttach.getIdPuntaje());
@@ -154,24 +125,21 @@ public class PersonaJpaController implements Serializable {
             }
             puntajeCuestionarioListNew = attachedPuntajeCuestionarioListNew;
             persona.setPuntajeCuestionarioList(puntajeCuestionarioListNew);
+            List<PersonaAsignatura> attachedPersonaAsignaturaListNew = new ArrayList<PersonaAsignatura>();
+            for (PersonaAsignatura personaAsignaturaListNewPersonaAsignaturaToAttach : personaAsignaturaListNew) {
+                personaAsignaturaListNewPersonaAsignaturaToAttach = em.getReference(personaAsignaturaListNewPersonaAsignaturaToAttach.getClass(), personaAsignaturaListNewPersonaAsignaturaToAttach.getIdPersonaA());
+                attachedPersonaAsignaturaListNew.add(personaAsignaturaListNewPersonaAsignaturaToAttach);
+            }
+            personaAsignaturaListNew = attachedPersonaAsignaturaListNew;
+            persona.setPersonaAsignaturaList(personaAsignaturaListNew);
+            List<Usuario> attachedUsuarioListNew = new ArrayList<Usuario>();
+            for (Usuario usuarioListNewUsuarioToAttach : usuarioListNew) {
+                usuarioListNewUsuarioToAttach = em.getReference(usuarioListNewUsuarioToAttach.getClass(), usuarioListNewUsuarioToAttach.getIdUsuario());
+                attachedUsuarioListNew.add(usuarioListNewUsuarioToAttach);
+            }
+            usuarioListNew = attachedUsuarioListNew;
+            persona.setUsuarioList(usuarioListNew);
             persona = em.merge(persona);
-            if (usuarioOld != null && !usuarioOld.equals(usuarioNew)) {
-                usuarioOld.setPersona(null);
-                usuarioOld = em.merge(usuarioOld);
-            }
-            if (usuarioNew != null && !usuarioNew.equals(usuarioOld)) {
-                usuarioNew.setPersona(persona);
-                usuarioNew = em.merge(usuarioNew);
-            }
-            if (personaAsignaturaNew != null && !personaAsignaturaNew.equals(personaAsignaturaOld)) {
-                Persona oldPersonaOfPersonaAsignatura = personaAsignaturaNew.getPersona();
-                if (oldPersonaOfPersonaAsignatura != null) {
-                    oldPersonaOfPersonaAsignatura.setPersonaAsignatura(null);
-                    oldPersonaOfPersonaAsignatura = em.merge(oldPersonaOfPersonaAsignatura);
-                }
-                personaAsignaturaNew.setPersona(persona);
-                personaAsignaturaNew = em.merge(personaAsignaturaNew);
-            }
             for (PuntajeCuestionario puntajeCuestionarioListOldPuntajeCuestionario : puntajeCuestionarioListOld) {
                 if (!puntajeCuestionarioListNew.contains(puntajeCuestionarioListOldPuntajeCuestionario)) {
                     puntajeCuestionarioListOldPuntajeCuestionario.setPcIdPersona(null);
@@ -186,6 +154,40 @@ public class PersonaJpaController implements Serializable {
                     if (oldPcIdPersonaOfPuntajeCuestionarioListNewPuntajeCuestionario != null && !oldPcIdPersonaOfPuntajeCuestionarioListNewPuntajeCuestionario.equals(persona)) {
                         oldPcIdPersonaOfPuntajeCuestionarioListNewPuntajeCuestionario.getPuntajeCuestionarioList().remove(puntajeCuestionarioListNewPuntajeCuestionario);
                         oldPcIdPersonaOfPuntajeCuestionarioListNewPuntajeCuestionario = em.merge(oldPcIdPersonaOfPuntajeCuestionarioListNewPuntajeCuestionario);
+                    }
+                }
+            }
+            for (PersonaAsignatura personaAsignaturaListOldPersonaAsignatura : personaAsignaturaListOld) {
+                if (!personaAsignaturaListNew.contains(personaAsignaturaListOldPersonaAsignatura)) {
+                    personaAsignaturaListOldPersonaAsignatura.setPaIdPersona(null);
+                    personaAsignaturaListOldPersonaAsignatura = em.merge(personaAsignaturaListOldPersonaAsignatura);
+                }
+            }
+            for (PersonaAsignatura personaAsignaturaListNewPersonaAsignatura : personaAsignaturaListNew) {
+                if (!personaAsignaturaListOld.contains(personaAsignaturaListNewPersonaAsignatura)) {
+                    Persona oldPaIdPersonaOfPersonaAsignaturaListNewPersonaAsignatura = personaAsignaturaListNewPersonaAsignatura.getPaIdPersona();
+                    personaAsignaturaListNewPersonaAsignatura.setPaIdPersona(persona);
+                    personaAsignaturaListNewPersonaAsignatura = em.merge(personaAsignaturaListNewPersonaAsignatura);
+                    if (oldPaIdPersonaOfPersonaAsignaturaListNewPersonaAsignatura != null && !oldPaIdPersonaOfPersonaAsignaturaListNewPersonaAsignatura.equals(persona)) {
+                        oldPaIdPersonaOfPersonaAsignaturaListNewPersonaAsignatura.getPersonaAsignaturaList().remove(personaAsignaturaListNewPersonaAsignatura);
+                        oldPaIdPersonaOfPersonaAsignaturaListNewPersonaAsignatura = em.merge(oldPaIdPersonaOfPersonaAsignaturaListNewPersonaAsignatura);
+                    }
+                }
+            }
+            for (Usuario usuarioListOldUsuario : usuarioListOld) {
+                if (!usuarioListNew.contains(usuarioListOldUsuario)) {
+                    usuarioListOldUsuario.setUsIdPersona(null);
+                    usuarioListOldUsuario = em.merge(usuarioListOldUsuario);
+                }
+            }
+            for (Usuario usuarioListNewUsuario : usuarioListNew) {
+                if (!usuarioListOld.contains(usuarioListNewUsuario)) {
+                    Persona oldUsIdPersonaOfUsuarioListNewUsuario = usuarioListNewUsuario.getUsIdPersona();
+                    usuarioListNewUsuario.setUsIdPersona(persona);
+                    usuarioListNewUsuario = em.merge(usuarioListNewUsuario);
+                    if (oldUsIdPersonaOfUsuarioListNewUsuario != null && !oldUsIdPersonaOfUsuarioListNewUsuario.equals(persona)) {
+                        oldUsIdPersonaOfUsuarioListNewUsuario.getUsuarioList().remove(usuarioListNewUsuario);
+                        oldUsIdPersonaOfUsuarioListNewUsuario = em.merge(oldUsIdPersonaOfUsuarioListNewUsuario);
                     }
                 }
             }
@@ -206,7 +208,7 @@ public class PersonaJpaController implements Serializable {
         }
     }
 
-    public void destroy(BigDecimal id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(BigDecimal id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -218,26 +220,20 @@ public class PersonaJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The persona with id " + id + " no longer exists.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            PersonaAsignatura personaAsignaturaOrphanCheck = persona.getPersonaAsignatura();
-            if (personaAsignaturaOrphanCheck != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Persona (" + persona + ") cannot be destroyed since the PersonaAsignatura " + personaAsignaturaOrphanCheck + " in its personaAsignatura field has a non-nullable persona field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            Usuario usuario = persona.getUsuario();
-            if (usuario != null) {
-                usuario.setPersona(null);
-                usuario = em.merge(usuario);
-            }
             List<PuntajeCuestionario> puntajeCuestionarioList = persona.getPuntajeCuestionarioList();
             for (PuntajeCuestionario puntajeCuestionarioListPuntajeCuestionario : puntajeCuestionarioList) {
                 puntajeCuestionarioListPuntajeCuestionario.setPcIdPersona(null);
                 puntajeCuestionarioListPuntajeCuestionario = em.merge(puntajeCuestionarioListPuntajeCuestionario);
+            }
+            List<PersonaAsignatura> personaAsignaturaList = persona.getPersonaAsignaturaList();
+            for (PersonaAsignatura personaAsignaturaListPersonaAsignatura : personaAsignaturaList) {
+                personaAsignaturaListPersonaAsignatura.setPaIdPersona(null);
+                personaAsignaturaListPersonaAsignatura = em.merge(personaAsignaturaListPersonaAsignatura);
+            }
+            List<Usuario> usuarioList = persona.getUsuarioList();
+            for (Usuario usuarioListUsuario : usuarioList) {
+                usuarioListUsuario.setUsIdPersona(null);
+                usuarioListUsuario = em.merge(usuarioListUsuario);
             }
             em.remove(persona);
             em.getTransaction().commit();

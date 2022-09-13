@@ -7,18 +7,23 @@ package Modelo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Shalva
+ * @author ASUS TUF GAMING
  */
 @Entity
 @Table(name = "CURSO")
@@ -37,6 +42,11 @@ public class Curso implements Serializable {
     private BigDecimal idCurso;
     @Column(name = "CUR_NOMBRE")
     private String curNombre;
+    @JoinColumn(name = "CUR_ID_A\u00d1O_LECTIVO", referencedColumnName = "ID_ANIO_LECTIVO")
+    @ManyToOne
+    private AnioLectivo curIdAñoLectivo;
+    @OneToMany(mappedBy = "asIdcurso")
+    private List<Asignatura> asignaturaList;
 
     public Curso() {
     }
@@ -59,6 +69,23 @@ public class Curso implements Serializable {
 
     public void setCurNombre(String curNombre) {
         this.curNombre = curNombre;
+    }
+
+    public AnioLectivo getCurIdAñoLectivo() {
+        return curIdAñoLectivo;
+    }
+
+    public void setCurIdAñoLectivo(AnioLectivo curIdAñoLectivo) {
+        this.curIdAñoLectivo = curIdAñoLectivo;
+    }
+
+    @XmlTransient
+    public List<Asignatura> getAsignaturaList() {
+        return asignaturaList;
+    }
+
+    public void setAsignaturaList(List<Asignatura> asignaturaList) {
+        this.asignaturaList = asignaturaList;
     }
 
     @Override

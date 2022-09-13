@@ -19,7 +19,7 @@ public class ManagerFactory {
     private EntityManagerFactory emf = null;
 
     public EntityManagerFactory getentityManagerFactory() {
-        return emf = Persistence.createEntityManagerFactory("proyecto_productiPU");
+        return emf = Persistence.createEntityManagerFactory("KidsGamesPU");
     }
 
     public static final Connection getConnection(final EntityManager entityManager) {

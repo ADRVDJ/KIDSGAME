@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Shalva
+ * @author ASUS TUF GAMING
  */
 @Entity
 @Table(name = "CUESTIONARIO")
@@ -45,6 +45,9 @@ public class Cuestionario implements Serializable {
     private String crTitulo;
     @Column(name = "CR_DESCRIPCION")
     private String crDescripcion;
+    @JoinColumn(name = "CR_ID_ASIGNATURA", referencedColumnName = "ID_ASIGNATURA")
+    @ManyToOne
+    private Asignatura crIdAsignatura;
     @JoinColumn(name = "CR_ID_JUEGO", referencedColumnName = "ID_JUEGO")
     @ManyToOne
     private Juegos crIdJuego;
@@ -82,6 +85,14 @@ public class Cuestionario implements Serializable {
 
     public void setCrDescripcion(String crDescripcion) {
         this.crDescripcion = crDescripcion;
+    }
+
+    public Asignatura getCrIdAsignatura() {
+        return crIdAsignatura;
+    }
+
+    public void setCrIdAsignatura(Asignatura crIdAsignatura) {
+        this.crIdAsignatura = crIdAsignatura;
     }
 
     public Juegos getCrIdJuego() {

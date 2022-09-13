@@ -7,25 +7,21 @@ package Modelo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Shalva
+ * @author ASUS TUF GAMING
  */
 @Entity
 @Table(name = "PERSONA")
@@ -36,10 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Persona.findByPrNombre", query = "SELECT p FROM Persona p WHERE p.prNombre = :prNombre"),
     @NamedQuery(name = "Persona.findByPrApellido", query = "SELECT p FROM Persona p WHERE p.prApellido = :prApellido"),
     @NamedQuery(name = "Persona.findByPrEdad", query = "SELECT p FROM Persona p WHERE p.prEdad = :prEdad"),
-    @NamedQuery(name = "Persona.findByPrGenero", query = "SELECT p FROM Persona p WHERE p.prGenero = :prGenero"),
-    @NamedQuery(name = "Persona.findByPrCurso", query = "SELECT p FROM Persona p WHERE p.prCurso = :prCurso"),
-    @NamedQuery(name = "Persona.findByPrTitulo", query = "SELECT p FROM Persona p WHERE p.prTitulo = :prTitulo"),
-    @NamedQuery(name = "Persona.findByIdUsuario", query = "SELECT p FROM Persona p WHERE p.idUsuario = :idUsuario")})
+    @NamedQuery(name = "Persona.findByPrGenero", query = "SELECT p FROM Persona p WHERE p.prGenero = :prGenero")})
 public class Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,19 +49,12 @@ public class Persona implements Serializable {
     private String prEdad;
     @Column(name = "PR_GENERO")
     private String prGenero;
-    @Column(name = "PR_CURSO")
-    private String prCurso;
-    @Column(name = "PR_TITULO")
-    private String prTitulo;
-    @Column(name = "ID_USUARIO")
-    private BigInteger idUsuario;
     @OneToMany(mappedBy = "pcIdPersona")
     private List<PuntajeCuestionario> puntajeCuestionarioList;
-    @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID_USUARIO", insertable = false, updatable = false)
-    @OneToOne(optional = false)
-    private Usuario usuario;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "persona")
-    private PersonaAsignatura personaAsignatura;
+    @OneToMany(mappedBy = "paIdPersona")
+    private List<PersonaAsignatura> personaAsignaturaList;
+    @OneToMany(mappedBy = "usIdPersona")
+    private List<Usuario> usuarioList;
 
     public Persona() {
     }
@@ -117,30 +103,6 @@ public class Persona implements Serializable {
         this.prGenero = prGenero;
     }
 
-    public String getPrCurso() {
-        return prCurso;
-    }
-
-    public void setPrCurso(String prCurso) {
-        this.prCurso = prCurso;
-    }
-
-    public String getPrTitulo() {
-        return prTitulo;
-    }
-
-    public void setPrTitulo(String prTitulo) {
-        this.prTitulo = prTitulo;
-    }
-
-    public BigInteger getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(BigInteger idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
     @XmlTransient
     public List<PuntajeCuestionario> getPuntajeCuestionarioList() {
         return puntajeCuestionarioList;
@@ -150,20 +112,22 @@ public class Persona implements Serializable {
         this.puntajeCuestionarioList = puntajeCuestionarioList;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    @XmlTransient
+    public List<PersonaAsignatura> getPersonaAsignaturaList() {
+        return personaAsignaturaList;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setPersonaAsignaturaList(List<PersonaAsignatura> personaAsignaturaList) {
+        this.personaAsignaturaList = personaAsignaturaList;
     }
 
-    public PersonaAsignatura getPersonaAsignatura() {
-        return personaAsignatura;
+    @XmlTransient
+    public List<Usuario> getUsuarioList() {
+        return usuarioList;
     }
 
-    public void setPersonaAsignatura(PersonaAsignatura personaAsignatura) {
-        this.personaAsignatura = personaAsignatura;
+    public void setUsuarioList(List<Usuario> usuarioList) {
+        this.usuarioList = usuarioList;
     }
 
     @Override

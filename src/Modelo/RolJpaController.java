@@ -49,12 +49,12 @@ public class RolJpaController implements Serializable {
             rol.setUsuarioList(attachedUsuarioList);
             em.persist(rol);
             for (Usuario usuarioListUsuario : rol.getUsuarioList()) {
-                Rol oldIdRolOfUsuarioListUsuario = usuarioListUsuario.getIdRol();
-                usuarioListUsuario.setIdRol(rol);
+                Rol oldUsIdRolOfUsuarioListUsuario = usuarioListUsuario.getUsIdRol();
+                usuarioListUsuario.setUsIdRol(rol);
                 usuarioListUsuario = em.merge(usuarioListUsuario);
-                if (oldIdRolOfUsuarioListUsuario != null) {
-                    oldIdRolOfUsuarioListUsuario.getUsuarioList().remove(usuarioListUsuario);
-                    oldIdRolOfUsuarioListUsuario = em.merge(oldIdRolOfUsuarioListUsuario);
+                if (oldUsIdRolOfUsuarioListUsuario != null) {
+                    oldUsIdRolOfUsuarioListUsuario.getUsuarioList().remove(usuarioListUsuario);
+                    oldUsIdRolOfUsuarioListUsuario = em.merge(oldUsIdRolOfUsuarioListUsuario);
                 }
             }
             em.getTransaction().commit();
@@ -88,18 +88,18 @@ public class RolJpaController implements Serializable {
             rol = em.merge(rol);
             for (Usuario usuarioListOldUsuario : usuarioListOld) {
                 if (!usuarioListNew.contains(usuarioListOldUsuario)) {
-                    usuarioListOldUsuario.setIdRol(null);
+                    usuarioListOldUsuario.setUsIdRol(null);
                     usuarioListOldUsuario = em.merge(usuarioListOldUsuario);
                 }
             }
             for (Usuario usuarioListNewUsuario : usuarioListNew) {
                 if (!usuarioListOld.contains(usuarioListNewUsuario)) {
-                    Rol oldIdRolOfUsuarioListNewUsuario = usuarioListNewUsuario.getIdRol();
-                    usuarioListNewUsuario.setIdRol(rol);
+                    Rol oldUsIdRolOfUsuarioListNewUsuario = usuarioListNewUsuario.getUsIdRol();
+                    usuarioListNewUsuario.setUsIdRol(rol);
                     usuarioListNewUsuario = em.merge(usuarioListNewUsuario);
-                    if (oldIdRolOfUsuarioListNewUsuario != null && !oldIdRolOfUsuarioListNewUsuario.equals(rol)) {
-                        oldIdRolOfUsuarioListNewUsuario.getUsuarioList().remove(usuarioListNewUsuario);
-                        oldIdRolOfUsuarioListNewUsuario = em.merge(oldIdRolOfUsuarioListNewUsuario);
+                    if (oldUsIdRolOfUsuarioListNewUsuario != null && !oldUsIdRolOfUsuarioListNewUsuario.equals(rol)) {
+                        oldUsIdRolOfUsuarioListNewUsuario.getUsuarioList().remove(usuarioListNewUsuario);
+                        oldUsIdRolOfUsuarioListNewUsuario = em.merge(oldUsIdRolOfUsuarioListNewUsuario);
                     }
                 }
             }
@@ -134,7 +134,7 @@ public class RolJpaController implements Serializable {
             }
             List<Usuario> usuarioList = rol.getUsuarioList();
             for (Usuario usuarioListUsuario : usuarioList) {
-                usuarioListUsuario.setIdRol(null);
+                usuarioListUsuario.setUsIdRol(null);
                 usuarioListUsuario = em.merge(usuarioListUsuario);
             }
             em.remove(rol);

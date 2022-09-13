@@ -5,7 +5,6 @@
  */
 package Modelo;
 
-import Modelo.exceptions.IllegalOrphanException;
 import Modelo.exceptions.NonexistentEntityException;
 import Modelo.exceptions.PreexistingEntityException;
 import java.io.Serializable;
@@ -34,52 +33,42 @@ public class PersonaAsignaturaJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(PersonaAsignatura personaAsignatura) throws IllegalOrphanException, PreexistingEntityException, Exception {
-        List<String> illegalOrphanMessages = null;
-        Persona personaOrphanCheck = personaAsignatura.getPersona();
-        if (personaOrphanCheck != null) {
-            PersonaAsignatura oldPersonaAsignaturaOfPersona = personaOrphanCheck.getPersonaAsignatura();
-            if (oldPersonaAsignaturaOfPersona != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("The Persona " + personaOrphanCheck + " already has an item of type PersonaAsignatura whose persona column cannot be null. Please make another selection for the persona field.");
-            }
-        }
-        if (illegalOrphanMessages != null) {
-            throw new IllegalOrphanException(illegalOrphanMessages);
+    public void create(PersonaAsignatura personaAsignatura) throws PreexistingEntityException, Exception {
+        if (personaAsignatura.getAsignaturaList() == null) {
+            personaAsignatura.setAsignaturaList(new ArrayList<Asignatura>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Asignatura asignatura = personaAsignatura.getAsignatura();
-            if (asignatura != null) {
-                asignatura = em.getReference(asignatura.getClass(), asignatura.getIdAsignatura());
-                personaAsignatura.setAsignatura(asignatura);
+            Persona paIdPersona = personaAsignatura.getPaIdPersona();
+            if (paIdPersona != null) {
+                paIdPersona = em.getReference(paIdPersona.getClass(), paIdPersona.getIdPersona());
+                personaAsignatura.setPaIdPersona(paIdPersona);
             }
-            Persona persona = personaAsignatura.getPersona();
-            if (persona != null) {
-                persona = em.getReference(persona.getClass(), persona.getIdPersona());
-                personaAsignatura.setPersona(persona);
+            List<Asignatura> attachedAsignaturaList = new ArrayList<Asignatura>();
+            for (Asignatura asignaturaListAsignaturaToAttach : personaAsignatura.getAsignaturaList()) {
+                asignaturaListAsignaturaToAttach = em.getReference(asignaturaListAsignaturaToAttach.getClass(), asignaturaListAsignaturaToAttach.getIdAsignatura());
+                attachedAsignaturaList.add(asignaturaListAsignaturaToAttach);
             }
+            personaAsignatura.setAsignaturaList(attachedAsignaturaList);
             em.persist(personaAsignatura);
-            if (asignatura != null) {
-                PersonaAsignatura oldPersonaAsignaturaOfAsignatura = asignatura.getPersonaAsignatura();
-                if (oldPersonaAsignaturaOfAsignatura != null) {
-                    oldPersonaAsignaturaOfAsignatura.setAsignatura(null);
-                    oldPersonaAsignaturaOfAsignatura = em.merge(oldPersonaAsignaturaOfAsignatura);
-                }
-                asignatura.setPersonaAsignatura(personaAsignatura);
-                asignatura = em.merge(asignatura);
+            if (paIdPersona != null) {
+                paIdPersona.getPersonaAsignaturaList().add(personaAsignatura);
+                paIdPersona = em.merge(paIdPersona);
             }
-            if (persona != null) {
-                persona.setPersonaAsignatura(personaAsignatura);
-                persona = em.merge(persona);
+            for (Asignatura asignaturaListAsignatura : personaAsignatura.getAsignaturaList()) {
+                PersonaAsignatura oldIdPersonaAOfAsignaturaListAsignatura = asignaturaListAsignatura.getIdPersonaA();
+                asignaturaListAsignatura.setIdPersonaA(personaAsignatura);
+                asignaturaListAsignatura = em.merge(asignaturaListAsignatura);
+                if (oldIdPersonaAOfAsignaturaListAsignatura != null) {
+                    oldIdPersonaAOfAsignaturaListAsignatura.getAsignaturaList().remove(asignaturaListAsignatura);
+                    oldIdPersonaAOfAsignaturaListAsignatura = em.merge(oldIdPersonaAOfAsignaturaListAsignatura);
+                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findPersonaAsignatura(personaAsignatura.getIdUsuarioA()) != null) {
+            if (findPersonaAsignatura(personaAsignatura.getIdPersonaA()) != null) {
                 throw new PreexistingEntityException("PersonaAsignatura " + personaAsignatura + " already exists.", ex);
             }
             throw ex;
@@ -90,66 +79,58 @@ public class PersonaAsignaturaJpaController implements Serializable {
         }
     }
 
-    public void edit(PersonaAsignatura personaAsignatura) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(PersonaAsignatura personaAsignatura) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            PersonaAsignatura persistentPersonaAsignatura = em.find(PersonaAsignatura.class, personaAsignatura.getIdUsuarioA());
-            Asignatura asignaturaOld = persistentPersonaAsignatura.getAsignatura();
-            Asignatura asignaturaNew = personaAsignatura.getAsignatura();
-            Persona personaOld = persistentPersonaAsignatura.getPersona();
-            Persona personaNew = personaAsignatura.getPersona();
-            List<String> illegalOrphanMessages = null;
-            if (asignaturaOld != null && !asignaturaOld.equals(asignaturaNew)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("You must retain Asignatura " + asignaturaOld + " since its personaAsignatura field is not nullable.");
+            PersonaAsignatura persistentPersonaAsignatura = em.find(PersonaAsignatura.class, personaAsignatura.getIdPersonaA());
+            Persona paIdPersonaOld = persistentPersonaAsignatura.getPaIdPersona();
+            Persona paIdPersonaNew = personaAsignatura.getPaIdPersona();
+            List<Asignatura> asignaturaListOld = persistentPersonaAsignatura.getAsignaturaList();
+            List<Asignatura> asignaturaListNew = personaAsignatura.getAsignaturaList();
+            if (paIdPersonaNew != null) {
+                paIdPersonaNew = em.getReference(paIdPersonaNew.getClass(), paIdPersonaNew.getIdPersona());
+                personaAsignatura.setPaIdPersona(paIdPersonaNew);
             }
-            if (personaNew != null && !personaNew.equals(personaOld)) {
-                PersonaAsignatura oldPersonaAsignaturaOfPersona = personaNew.getPersonaAsignatura();
-                if (oldPersonaAsignaturaOfPersona != null) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("The Persona " + personaNew + " already has an item of type PersonaAsignatura whose persona column cannot be null. Please make another selection for the persona field.");
-                }
+            List<Asignatura> attachedAsignaturaListNew = new ArrayList<Asignatura>();
+            for (Asignatura asignaturaListNewAsignaturaToAttach : asignaturaListNew) {
+                asignaturaListNewAsignaturaToAttach = em.getReference(asignaturaListNewAsignaturaToAttach.getClass(), asignaturaListNewAsignaturaToAttach.getIdAsignatura());
+                attachedAsignaturaListNew.add(asignaturaListNewAsignaturaToAttach);
             }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            if (asignaturaNew != null) {
-                asignaturaNew = em.getReference(asignaturaNew.getClass(), asignaturaNew.getIdAsignatura());
-                personaAsignatura.setAsignatura(asignaturaNew);
-            }
-            if (personaNew != null) {
-                personaNew = em.getReference(personaNew.getClass(), personaNew.getIdPersona());
-                personaAsignatura.setPersona(personaNew);
-            }
+            asignaturaListNew = attachedAsignaturaListNew;
+            personaAsignatura.setAsignaturaList(asignaturaListNew);
             personaAsignatura = em.merge(personaAsignatura);
-            if (asignaturaNew != null && !asignaturaNew.equals(asignaturaOld)) {
-                PersonaAsignatura oldPersonaAsignaturaOfAsignatura = asignaturaNew.getPersonaAsignatura();
-                if (oldPersonaAsignaturaOfAsignatura != null) {
-                    oldPersonaAsignaturaOfAsignatura.setAsignatura(null);
-                    oldPersonaAsignaturaOfAsignatura = em.merge(oldPersonaAsignaturaOfAsignatura);
+            if (paIdPersonaOld != null && !paIdPersonaOld.equals(paIdPersonaNew)) {
+                paIdPersonaOld.getPersonaAsignaturaList().remove(personaAsignatura);
+                paIdPersonaOld = em.merge(paIdPersonaOld);
+            }
+            if (paIdPersonaNew != null && !paIdPersonaNew.equals(paIdPersonaOld)) {
+                paIdPersonaNew.getPersonaAsignaturaList().add(personaAsignatura);
+                paIdPersonaNew = em.merge(paIdPersonaNew);
+            }
+            for (Asignatura asignaturaListOldAsignatura : asignaturaListOld) {
+                if (!asignaturaListNew.contains(asignaturaListOldAsignatura)) {
+                    asignaturaListOldAsignatura.setIdPersonaA(null);
+                    asignaturaListOldAsignatura = em.merge(asignaturaListOldAsignatura);
                 }
-                asignaturaNew.setPersonaAsignatura(personaAsignatura);
-                asignaturaNew = em.merge(asignaturaNew);
             }
-            if (personaOld != null && !personaOld.equals(personaNew)) {
-                personaOld.setPersonaAsignatura(null);
-                personaOld = em.merge(personaOld);
-            }
-            if (personaNew != null && !personaNew.equals(personaOld)) {
-                personaNew.setPersonaAsignatura(personaAsignatura);
-                personaNew = em.merge(personaNew);
+            for (Asignatura asignaturaListNewAsignatura : asignaturaListNew) {
+                if (!asignaturaListOld.contains(asignaturaListNewAsignatura)) {
+                    PersonaAsignatura oldIdPersonaAOfAsignaturaListNewAsignatura = asignaturaListNewAsignatura.getIdPersonaA();
+                    asignaturaListNewAsignatura.setIdPersonaA(personaAsignatura);
+                    asignaturaListNewAsignatura = em.merge(asignaturaListNewAsignatura);
+                    if (oldIdPersonaAOfAsignaturaListNewAsignatura != null && !oldIdPersonaAOfAsignaturaListNewAsignatura.equals(personaAsignatura)) {
+                        oldIdPersonaAOfAsignaturaListNewAsignatura.getAsignaturaList().remove(asignaturaListNewAsignatura);
+                        oldIdPersonaAOfAsignaturaListNewAsignatura = em.merge(oldIdPersonaAOfAsignaturaListNewAsignatura);
+                    }
+                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                BigDecimal id = personaAsignatura.getIdUsuarioA();
+                BigDecimal id = personaAsignatura.getIdPersonaA();
                 if (findPersonaAsignatura(id) == null) {
                     throw new NonexistentEntityException("The personaAsignatura with id " + id + " no longer exists.");
                 }
@@ -162,7 +143,7 @@ public class PersonaAsignaturaJpaController implements Serializable {
         }
     }
 
-    public void destroy(BigDecimal id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(BigDecimal id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -170,25 +151,19 @@ public class PersonaAsignaturaJpaController implements Serializable {
             PersonaAsignatura personaAsignatura;
             try {
                 personaAsignatura = em.getReference(PersonaAsignatura.class, id);
-                personaAsignatura.getIdUsuarioA();
+                personaAsignatura.getIdPersonaA();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The personaAsignatura with id " + id + " no longer exists.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            Asignatura asignaturaOrphanCheck = personaAsignatura.getAsignatura();
-            if (asignaturaOrphanCheck != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This PersonaAsignatura (" + personaAsignatura + ") cannot be destroyed since the Asignatura " + asignaturaOrphanCheck + " in its asignatura field has a non-nullable personaAsignatura field.");
+            Persona paIdPersona = personaAsignatura.getPaIdPersona();
+            if (paIdPersona != null) {
+                paIdPersona.getPersonaAsignaturaList().remove(personaAsignatura);
+                paIdPersona = em.merge(paIdPersona);
             }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            Persona persona = personaAsignatura.getPersona();
-            if (persona != null) {
-                persona.setPersonaAsignatura(null);
-                persona = em.merge(persona);
+            List<Asignatura> asignaturaList = personaAsignatura.getAsignaturaList();
+            for (Asignatura asignaturaListAsignatura : asignaturaList) {
+                asignaturaListAsignatura.setIdPersonaA(null);
+                asignaturaListAsignatura = em.merge(asignaturaListAsignatura);
             }
             em.remove(personaAsignatura);
             em.getTransaction().commit();

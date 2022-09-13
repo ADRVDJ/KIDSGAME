@@ -44,6 +44,11 @@ public class CuestionarioJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Asignatura crIdAsignatura = cuestionario.getCrIdAsignatura();
+            if (crIdAsignatura != null) {
+                crIdAsignatura = em.getReference(crIdAsignatura.getClass(), crIdAsignatura.getIdAsignatura());
+                cuestionario.setCrIdAsignatura(crIdAsignatura);
+            }
             Juegos crIdJuego = cuestionario.getCrIdJuego();
             if (crIdJuego != null) {
                 crIdJuego = em.getReference(crIdJuego.getClass(), crIdJuego.getIdJuego());
@@ -62,6 +67,10 @@ public class CuestionarioJpaController implements Serializable {
             }
             cuestionario.setPuntajeCuestionarioList(attachedPuntajeCuestionarioList);
             em.persist(cuestionario);
+            if (crIdAsignatura != null) {
+                crIdAsignatura.getCuestionarioList().add(cuestionario);
+                crIdAsignatura = em.merge(crIdAsignatura);
+            }
             if (crIdJuego != null) {
                 crIdJuego.getCuestionarioList().add(cuestionario);
                 crIdJuego = em.merge(crIdJuego);
@@ -103,12 +112,18 @@ public class CuestionarioJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Cuestionario persistentCuestionario = em.find(Cuestionario.class, cuestionario.getIdCuestionario());
+            Asignatura crIdAsignaturaOld = persistentCuestionario.getCrIdAsignatura();
+            Asignatura crIdAsignaturaNew = cuestionario.getCrIdAsignatura();
             Juegos crIdJuegoOld = persistentCuestionario.getCrIdJuego();
             Juegos crIdJuegoNew = cuestionario.getCrIdJuego();
             List<Preguntas> preguntasListOld = persistentCuestionario.getPreguntasList();
             List<Preguntas> preguntasListNew = cuestionario.getPreguntasList();
             List<PuntajeCuestionario> puntajeCuestionarioListOld = persistentCuestionario.getPuntajeCuestionarioList();
             List<PuntajeCuestionario> puntajeCuestionarioListNew = cuestionario.getPuntajeCuestionarioList();
+            if (crIdAsignaturaNew != null) {
+                crIdAsignaturaNew = em.getReference(crIdAsignaturaNew.getClass(), crIdAsignaturaNew.getIdAsignatura());
+                cuestionario.setCrIdAsignatura(crIdAsignaturaNew);
+            }
             if (crIdJuegoNew != null) {
                 crIdJuegoNew = em.getReference(crIdJuegoNew.getClass(), crIdJuegoNew.getIdJuego());
                 cuestionario.setCrIdJuego(crIdJuegoNew);
@@ -128,6 +143,14 @@ public class CuestionarioJpaController implements Serializable {
             puntajeCuestionarioListNew = attachedPuntajeCuestionarioListNew;
             cuestionario.setPuntajeCuestionarioList(puntajeCuestionarioListNew);
             cuestionario = em.merge(cuestionario);
+            if (crIdAsignaturaOld != null && !crIdAsignaturaOld.equals(crIdAsignaturaNew)) {
+                crIdAsignaturaOld.getCuestionarioList().remove(cuestionario);
+                crIdAsignaturaOld = em.merge(crIdAsignaturaOld);
+            }
+            if (crIdAsignaturaNew != null && !crIdAsignaturaNew.equals(crIdAsignaturaOld)) {
+                crIdAsignaturaNew.getCuestionarioList().add(cuestionario);
+                crIdAsignaturaNew = em.merge(crIdAsignaturaNew);
+            }
             if (crIdJuegoOld != null && !crIdJuegoOld.equals(crIdJuegoNew)) {
                 crIdJuegoOld.getCuestionarioList().remove(cuestionario);
                 crIdJuegoOld = em.merge(crIdJuegoOld);
@@ -198,6 +221,11 @@ public class CuestionarioJpaController implements Serializable {
                 cuestionario.getIdCuestionario();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The cuestionario with id " + id + " no longer exists.", enfe);
+            }
+            Asignatura crIdAsignatura = cuestionario.getCrIdAsignatura();
+            if (crIdAsignatura != null) {
+                crIdAsignatura.getCuestionarioList().remove(cuestionario);
+                crIdAsignatura = em.merge(crIdAsignatura);
             }
             Juegos crIdJuego = cuestionario.getCrIdJuego();
             if (crIdJuego != null) {

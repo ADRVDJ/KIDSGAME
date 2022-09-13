@@ -5,7 +5,6 @@
  */
 package Modelo;
 
-import Modelo.exceptions.IllegalOrphanException;
 import Modelo.exceptions.NonexistentEntityException;
 import Modelo.exceptions.PreexistingEntityException;
 import java.io.Serializable;
@@ -34,34 +33,29 @@ public class AnioLectivoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(AnioLectivo anioLectivo) throws IllegalOrphanException, PreexistingEntityException, Exception {
-        List<String> illegalOrphanMessages = null;
-        Asignatura asignaturaOrphanCheck = anioLectivo.getAsignatura();
-        if (asignaturaOrphanCheck != null) {
-            AnioLectivo oldAnioLectivoOfAsignatura = asignaturaOrphanCheck.getAnioLectivo();
-            if (oldAnioLectivoOfAsignatura != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("The Asignatura " + asignaturaOrphanCheck + " already has an item of type AnioLectivo whose asignatura column cannot be null. Please make another selection for the asignatura field.");
-            }
-        }
-        if (illegalOrphanMessages != null) {
-            throw new IllegalOrphanException(illegalOrphanMessages);
+    public void create(AnioLectivo anioLectivo) throws PreexistingEntityException, Exception {
+        if (anioLectivo.getCursoList() == null) {
+            anioLectivo.setCursoList(new ArrayList<Curso>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Asignatura asignatura = anioLectivo.getAsignatura();
-            if (asignatura != null) {
-                asignatura = em.getReference(asignatura.getClass(), asignatura.getIdAsignatura());
-                anioLectivo.setAsignatura(asignatura);
+            List<Curso> attachedCursoList = new ArrayList<Curso>();
+            for (Curso cursoListCursoToAttach : anioLectivo.getCursoList()) {
+                cursoListCursoToAttach = em.getReference(cursoListCursoToAttach.getClass(), cursoListCursoToAttach.getIdCurso());
+                attachedCursoList.add(cursoListCursoToAttach);
             }
+            anioLectivo.setCursoList(attachedCursoList);
             em.persist(anioLectivo);
-            if (asignatura != null) {
-                asignatura.setAnioLectivo(anioLectivo);
-                asignatura = em.merge(asignatura);
+            for (Curso cursoListCurso : anioLectivo.getCursoList()) {
+                AnioLectivo oldCurIdAñoLectivoOfCursoListCurso = cursoListCurso.getCurIdAñoLectivo();
+                cursoListCurso.setCurIdAñoLectivo(anioLectivo);
+                cursoListCurso = em.merge(cursoListCurso);
+                if (oldCurIdAñoLectivoOfCursoListCurso != null) {
+                    oldCurIdAñoLectivoOfCursoListCurso.getCursoList().remove(cursoListCurso);
+                    oldCurIdAñoLectivoOfCursoListCurso = em.merge(oldCurIdAñoLectivoOfCursoListCurso);
+                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -76,39 +70,38 @@ public class AnioLectivoJpaController implements Serializable {
         }
     }
 
-    public void edit(AnioLectivo anioLectivo) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(AnioLectivo anioLectivo) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             AnioLectivo persistentAnioLectivo = em.find(AnioLectivo.class, anioLectivo.getIdAnioLectivo());
-            Asignatura asignaturaOld = persistentAnioLectivo.getAsignatura();
-            Asignatura asignaturaNew = anioLectivo.getAsignatura();
-            List<String> illegalOrphanMessages = null;
-            if (asignaturaNew != null && !asignaturaNew.equals(asignaturaOld)) {
-                AnioLectivo oldAnioLectivoOfAsignatura = asignaturaNew.getAnioLectivo();
-                if (oldAnioLectivoOfAsignatura != null) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("The Asignatura " + asignaturaNew + " already has an item of type AnioLectivo whose asignatura column cannot be null. Please make another selection for the asignatura field.");
+            List<Curso> cursoListOld = persistentAnioLectivo.getCursoList();
+            List<Curso> cursoListNew = anioLectivo.getCursoList();
+            List<Curso> attachedCursoListNew = new ArrayList<Curso>();
+            for (Curso cursoListNewCursoToAttach : cursoListNew) {
+                cursoListNewCursoToAttach = em.getReference(cursoListNewCursoToAttach.getClass(), cursoListNewCursoToAttach.getIdCurso());
+                attachedCursoListNew.add(cursoListNewCursoToAttach);
+            }
+            cursoListNew = attachedCursoListNew;
+            anioLectivo.setCursoList(cursoListNew);
+            anioLectivo = em.merge(anioLectivo);
+            for (Curso cursoListOldCurso : cursoListOld) {
+                if (!cursoListNew.contains(cursoListOldCurso)) {
+                    cursoListOldCurso.setCurIdAñoLectivo(null);
+                    cursoListOldCurso = em.merge(cursoListOldCurso);
                 }
             }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            if (asignaturaNew != null) {
-                asignaturaNew = em.getReference(asignaturaNew.getClass(), asignaturaNew.getIdAsignatura());
-                anioLectivo.setAsignatura(asignaturaNew);
-            }
-            anioLectivo = em.merge(anioLectivo);
-            if (asignaturaOld != null && !asignaturaOld.equals(asignaturaNew)) {
-                asignaturaOld.setAnioLectivo(null);
-                asignaturaOld = em.merge(asignaturaOld);
-            }
-            if (asignaturaNew != null && !asignaturaNew.equals(asignaturaOld)) {
-                asignaturaNew.setAnioLectivo(anioLectivo);
-                asignaturaNew = em.merge(asignaturaNew);
+            for (Curso cursoListNewCurso : cursoListNew) {
+                if (!cursoListOld.contains(cursoListNewCurso)) {
+                    AnioLectivo oldCurIdAñoLectivoOfCursoListNewCurso = cursoListNewCurso.getCurIdAñoLectivo();
+                    cursoListNewCurso.setCurIdAñoLectivo(anioLectivo);
+                    cursoListNewCurso = em.merge(cursoListNewCurso);
+                    if (oldCurIdAñoLectivoOfCursoListNewCurso != null && !oldCurIdAñoLectivoOfCursoListNewCurso.equals(anioLectivo)) {
+                        oldCurIdAñoLectivoOfCursoListNewCurso.getCursoList().remove(cursoListNewCurso);
+                        oldCurIdAñoLectivoOfCursoListNewCurso = em.merge(oldCurIdAñoLectivoOfCursoListNewCurso);
+                    }
+                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -139,10 +132,10 @@ public class AnioLectivoJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The anioLectivo with id " + id + " no longer exists.", enfe);
             }
-            Asignatura asignatura = anioLectivo.getAsignatura();
-            if (asignatura != null) {
-                asignatura.setAnioLectivo(null);
-                asignatura = em.merge(asignatura);
+            List<Curso> cursoList = anioLectivo.getCursoList();
+            for (Curso cursoListCurso : cursoList) {
+                cursoListCurso.setCurIdAñoLectivo(null);
+                cursoListCurso = em.merge(cursoListCurso);
             }
             em.remove(anioLectivo);
             em.getTransaction().commit();

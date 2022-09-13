@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Shalva
+ * @author ASUS TUF GAMING
  */
 @Entity
 @Table(name = "ROL")
@@ -43,7 +43,7 @@ public class Rol implements Serializable {
     private String rolNombre;
     @Column(name = "ROL_DESCRIPCION")
     private String rolDescripcion;
-    @OneToMany(mappedBy = "idRol")
+    @OneToMany(mappedBy = "usIdRol")
     private List<Usuario> usuarioList;
 
     public Rol() {

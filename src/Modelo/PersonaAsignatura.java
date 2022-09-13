@@ -7,89 +7,80 @@ package Modelo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Shalva
+ * @author ASUS TUF GAMING
  */
 @Entity
 @Table(name = "PERSONA_ASIGNATURA")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PersonaAsignatura.findAll", query = "SELECT p FROM PersonaAsignatura p"),
-    @NamedQuery(name = "PersonaAsignatura.findByIdUsuarioA", query = "SELECT p FROM PersonaAsignatura p WHERE p.idUsuarioA = :idUsuarioA"),
-    @NamedQuery(name = "PersonaAsignatura.findByIdPersona", query = "SELECT p FROM PersonaAsignatura p WHERE p.idPersona = :idPersona")})
+    @NamedQuery(name = "PersonaAsignatura.findByIdPersonaA", query = "SELECT p FROM PersonaAsignatura p WHERE p.idPersonaA = :idPersonaA")})
 public class PersonaAsignatura implements Serializable {
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
-    @Column(name = "ID_USUARIO_A")
-    private BigDecimal idUsuarioA;
-    @Column(name = "ID_PERSONA")
-    private BigInteger idPersona;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "personaAsignatura")
-    private Asignatura asignatura;
-    @JoinColumn(name = "ID_USUARIO_A", referencedColumnName = "ID_PERSONA", insertable = false, updatable = false)
-    @OneToOne(optional = false)
-    private Persona persona;
+    @Column(name = "ID_PERSONA_A")
+    private BigDecimal idPersonaA;
+    @OneToMany(mappedBy = "idPersonaA")
+    private List<Asignatura> asignaturaList;
+    @JoinColumn(name = "PA_ID_PERSONA", referencedColumnName = "ID_PERSONA")
+    @ManyToOne
+    private Persona paIdPersona;
 
     public PersonaAsignatura() {
     }
 
-    public PersonaAsignatura(BigDecimal idUsuarioA) {
-        this.idUsuarioA = idUsuarioA;
+    public PersonaAsignatura(BigDecimal idPersonaA) {
+        this.idPersonaA = idPersonaA;
     }
 
-    public BigDecimal getIdUsuarioA() {
-        return idUsuarioA;
+    public BigDecimal getIdPersonaA() {
+        return idPersonaA;
     }
 
-    public void setIdUsuarioA(BigDecimal idUsuarioA) {
-        this.idUsuarioA = idUsuarioA;
+    public void setIdPersonaA(BigDecimal idPersonaA) {
+        this.idPersonaA = idPersonaA;
     }
 
-    public BigInteger getIdPersona() {
-        return idPersona;
+    @XmlTransient
+    public List<Asignatura> getAsignaturaList() {
+        return asignaturaList;
     }
 
-    public void setIdPersona(BigInteger idPersona) {
-        this.idPersona = idPersona;
+    public void setAsignaturaList(List<Asignatura> asignaturaList) {
+        this.asignaturaList = asignaturaList;
     }
 
-    public Asignatura getAsignatura() {
-        return asignatura;
+    public Persona getPaIdPersona() {
+        return paIdPersona;
     }
 
-    public void setAsignatura(Asignatura asignatura) {
-        this.asignatura = asignatura;
-    }
-
-    public Persona getPersona() {
-        return persona;
-    }
-
-    public void setPersona(Persona persona) {
-        this.persona = persona;
+    public void setPaIdPersona(Persona paIdPersona) {
+        this.paIdPersona = paIdPersona;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idUsuarioA != null ? idUsuarioA.hashCode() : 0);
+        hash += (idPersonaA != null ? idPersonaA.hashCode() : 0);
         return hash;
     }
 
@@ -100,7 +91,7 @@ public class PersonaAsignatura implements Serializable {
             return false;
         }
         PersonaAsignatura other = (PersonaAsignatura) object;
-        if ((this.idUsuarioA == null && other.idUsuarioA != null) || (this.idUsuarioA != null && !this.idUsuarioA.equals(other.idUsuarioA))) {
+        if ((this.idPersonaA == null && other.idPersonaA != null) || (this.idPersonaA != null && !this.idPersonaA.equals(other.idPersonaA))) {
             return false;
         }
         return true;
@@ -108,7 +99,7 @@ public class PersonaAsignatura implements Serializable {
 
     @Override
     public String toString() {
-        return "Modelo.PersonaAsignatura[ idUsuarioA=" + idUsuarioA + " ]";
+        return "Modelo.PersonaAsignatura[ idPersonaA=" + idPersonaA + " ]";
     }
     
 }

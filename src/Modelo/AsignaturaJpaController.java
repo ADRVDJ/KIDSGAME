@@ -5,7 +5,6 @@
  */
 package Modelo;
 
-import Modelo.exceptions.IllegalOrphanException;
 import Modelo.exceptions.NonexistentEntityException;
 import Modelo.exceptions.PreexistingEntityException;
 import java.io.Serializable;
@@ -34,48 +33,47 @@ public class AsignaturaJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Asignatura asignatura) throws IllegalOrphanException, PreexistingEntityException, Exception {
-        List<String> illegalOrphanMessages = null;
-        PersonaAsignatura personaAsignaturaOrphanCheck = asignatura.getPersonaAsignatura();
-        if (personaAsignaturaOrphanCheck != null) {
-            Asignatura oldAsignaturaOfPersonaAsignatura = personaAsignaturaOrphanCheck.getAsignatura();
-            if (oldAsignaturaOfPersonaAsignatura != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("The PersonaAsignatura " + personaAsignaturaOrphanCheck + " already has an item of type Asignatura whose personaAsignatura column cannot be null. Please make another selection for the personaAsignatura field.");
-            }
-        }
-        if (illegalOrphanMessages != null) {
-            throw new IllegalOrphanException(illegalOrphanMessages);
+    public void create(Asignatura asignatura) throws PreexistingEntityException, Exception {
+        if (asignatura.getCuestionarioList() == null) {
+            asignatura.setCuestionarioList(new ArrayList<Cuestionario>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            AnioLectivo anioLectivo = asignatura.getAnioLectivo();
-            if (anioLectivo != null) {
-                anioLectivo = em.getReference(anioLectivo.getClass(), anioLectivo.getIdAnioLectivo());
-                asignatura.setAnioLectivo(anioLectivo);
+            Curso asIdcurso = asignatura.getAsIdcurso();
+            if (asIdcurso != null) {
+                asIdcurso = em.getReference(asIdcurso.getClass(), asIdcurso.getIdCurso());
+                asignatura.setAsIdcurso(asIdcurso);
             }
-            PersonaAsignatura personaAsignatura = asignatura.getPersonaAsignatura();
-            if (personaAsignatura != null) {
-                personaAsignatura = em.getReference(personaAsignatura.getClass(), personaAsignatura.getIdUsuarioA());
-                asignatura.setPersonaAsignatura(personaAsignatura);
+            PersonaAsignatura idPersonaA = asignatura.getIdPersonaA();
+            if (idPersonaA != null) {
+                idPersonaA = em.getReference(idPersonaA.getClass(), idPersonaA.getIdPersonaA());
+                asignatura.setIdPersonaA(idPersonaA);
             }
+            List<Cuestionario> attachedCuestionarioList = new ArrayList<Cuestionario>();
+            for (Cuestionario cuestionarioListCuestionarioToAttach : asignatura.getCuestionarioList()) {
+                cuestionarioListCuestionarioToAttach = em.getReference(cuestionarioListCuestionarioToAttach.getClass(), cuestionarioListCuestionarioToAttach.getIdCuestionario());
+                attachedCuestionarioList.add(cuestionarioListCuestionarioToAttach);
+            }
+            asignatura.setCuestionarioList(attachedCuestionarioList);
             em.persist(asignatura);
-            if (anioLectivo != null) {
-                Asignatura oldAsignaturaOfAnioLectivo = anioLectivo.getAsignatura();
-                if (oldAsignaturaOfAnioLectivo != null) {
-                    oldAsignaturaOfAnioLectivo.setAnioLectivo(null);
-                    oldAsignaturaOfAnioLectivo = em.merge(oldAsignaturaOfAnioLectivo);
-                }
-                anioLectivo.setAsignatura(asignatura);
-                anioLectivo = em.merge(anioLectivo);
+            if (asIdcurso != null) {
+                asIdcurso.getAsignaturaList().add(asignatura);
+                asIdcurso = em.merge(asIdcurso);
             }
-            if (personaAsignatura != null) {
-                personaAsignatura.setAsignatura(asignatura);
-                personaAsignatura = em.merge(personaAsignatura);
+            if (idPersonaA != null) {
+                idPersonaA.getAsignaturaList().add(asignatura);
+                idPersonaA = em.merge(idPersonaA);
+            }
+            for (Cuestionario cuestionarioListCuestionario : asignatura.getCuestionarioList()) {
+                Asignatura oldCrIdAsignaturaOfCuestionarioListCuestionario = cuestionarioListCuestionario.getCrIdAsignatura();
+                cuestionarioListCuestionario.setCrIdAsignatura(asignatura);
+                cuestionarioListCuestionario = em.merge(cuestionarioListCuestionario);
+                if (oldCrIdAsignaturaOfCuestionarioListCuestionario != null) {
+                    oldCrIdAsignaturaOfCuestionarioListCuestionario.getCuestionarioList().remove(cuestionarioListCuestionario);
+                    oldCrIdAsignaturaOfCuestionarioListCuestionario = em.merge(oldCrIdAsignaturaOfCuestionarioListCuestionario);
+                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -90,60 +88,66 @@ public class AsignaturaJpaController implements Serializable {
         }
     }
 
-    public void edit(Asignatura asignatura) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Asignatura asignatura) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             Asignatura persistentAsignatura = em.find(Asignatura.class, asignatura.getIdAsignatura());
-            AnioLectivo anioLectivoOld = persistentAsignatura.getAnioLectivo();
-            AnioLectivo anioLectivoNew = asignatura.getAnioLectivo();
-            PersonaAsignatura personaAsignaturaOld = persistentAsignatura.getPersonaAsignatura();
-            PersonaAsignatura personaAsignaturaNew = asignatura.getPersonaAsignatura();
-            List<String> illegalOrphanMessages = null;
-            if (anioLectivoOld != null && !anioLectivoOld.equals(anioLectivoNew)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("You must retain AnioLectivo " + anioLectivoOld + " since its asignatura field is not nullable.");
+            Curso asIdcursoOld = persistentAsignatura.getAsIdcurso();
+            Curso asIdcursoNew = asignatura.getAsIdcurso();
+            PersonaAsignatura idPersonaAOld = persistentAsignatura.getIdPersonaA();
+            PersonaAsignatura idPersonaANew = asignatura.getIdPersonaA();
+            List<Cuestionario> cuestionarioListOld = persistentAsignatura.getCuestionarioList();
+            List<Cuestionario> cuestionarioListNew = asignatura.getCuestionarioList();
+            if (asIdcursoNew != null) {
+                asIdcursoNew = em.getReference(asIdcursoNew.getClass(), asIdcursoNew.getIdCurso());
+                asignatura.setAsIdcurso(asIdcursoNew);
             }
-            if (personaAsignaturaNew != null && !personaAsignaturaNew.equals(personaAsignaturaOld)) {
-                Asignatura oldAsignaturaOfPersonaAsignatura = personaAsignaturaNew.getAsignatura();
-                if (oldAsignaturaOfPersonaAsignatura != null) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("The PersonaAsignatura " + personaAsignaturaNew + " already has an item of type Asignatura whose personaAsignatura column cannot be null. Please make another selection for the personaAsignatura field.");
-                }
+            if (idPersonaANew != null) {
+                idPersonaANew = em.getReference(idPersonaANew.getClass(), idPersonaANew.getIdPersonaA());
+                asignatura.setIdPersonaA(idPersonaANew);
             }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
+            List<Cuestionario> attachedCuestionarioListNew = new ArrayList<Cuestionario>();
+            for (Cuestionario cuestionarioListNewCuestionarioToAttach : cuestionarioListNew) {
+                cuestionarioListNewCuestionarioToAttach = em.getReference(cuestionarioListNewCuestionarioToAttach.getClass(), cuestionarioListNewCuestionarioToAttach.getIdCuestionario());
+                attachedCuestionarioListNew.add(cuestionarioListNewCuestionarioToAttach);
             }
-            if (anioLectivoNew != null) {
-                anioLectivoNew = em.getReference(anioLectivoNew.getClass(), anioLectivoNew.getIdAnioLectivo());
-                asignatura.setAnioLectivo(anioLectivoNew);
-            }
-            if (personaAsignaturaNew != null) {
-                personaAsignaturaNew = em.getReference(personaAsignaturaNew.getClass(), personaAsignaturaNew.getIdUsuarioA());
-                asignatura.setPersonaAsignatura(personaAsignaturaNew);
-            }
+            cuestionarioListNew = attachedCuestionarioListNew;
+            asignatura.setCuestionarioList(cuestionarioListNew);
             asignatura = em.merge(asignatura);
-            if (anioLectivoNew != null && !anioLectivoNew.equals(anioLectivoOld)) {
-                Asignatura oldAsignaturaOfAnioLectivo = anioLectivoNew.getAsignatura();
-                if (oldAsignaturaOfAnioLectivo != null) {
-                    oldAsignaturaOfAnioLectivo.setAnioLectivo(null);
-                    oldAsignaturaOfAnioLectivo = em.merge(oldAsignaturaOfAnioLectivo);
+            if (asIdcursoOld != null && !asIdcursoOld.equals(asIdcursoNew)) {
+                asIdcursoOld.getAsignaturaList().remove(asignatura);
+                asIdcursoOld = em.merge(asIdcursoOld);
+            }
+            if (asIdcursoNew != null && !asIdcursoNew.equals(asIdcursoOld)) {
+                asIdcursoNew.getAsignaturaList().add(asignatura);
+                asIdcursoNew = em.merge(asIdcursoNew);
+            }
+            if (idPersonaAOld != null && !idPersonaAOld.equals(idPersonaANew)) {
+                idPersonaAOld.getAsignaturaList().remove(asignatura);
+                idPersonaAOld = em.merge(idPersonaAOld);
+            }
+            if (idPersonaANew != null && !idPersonaANew.equals(idPersonaAOld)) {
+                idPersonaANew.getAsignaturaList().add(asignatura);
+                idPersonaANew = em.merge(idPersonaANew);
+            }
+            for (Cuestionario cuestionarioListOldCuestionario : cuestionarioListOld) {
+                if (!cuestionarioListNew.contains(cuestionarioListOldCuestionario)) {
+                    cuestionarioListOldCuestionario.setCrIdAsignatura(null);
+                    cuestionarioListOldCuestionario = em.merge(cuestionarioListOldCuestionario);
                 }
-                anioLectivoNew.setAsignatura(asignatura);
-                anioLectivoNew = em.merge(anioLectivoNew);
             }
-            if (personaAsignaturaOld != null && !personaAsignaturaOld.equals(personaAsignaturaNew)) {
-                personaAsignaturaOld.setAsignatura(null);
-                personaAsignaturaOld = em.merge(personaAsignaturaOld);
-            }
-            if (personaAsignaturaNew != null && !personaAsignaturaNew.equals(personaAsignaturaOld)) {
-                personaAsignaturaNew.setAsignatura(asignatura);
-                personaAsignaturaNew = em.merge(personaAsignaturaNew);
+            for (Cuestionario cuestionarioListNewCuestionario : cuestionarioListNew) {
+                if (!cuestionarioListOld.contains(cuestionarioListNewCuestionario)) {
+                    Asignatura oldCrIdAsignaturaOfCuestionarioListNewCuestionario = cuestionarioListNewCuestionario.getCrIdAsignatura();
+                    cuestionarioListNewCuestionario.setCrIdAsignatura(asignatura);
+                    cuestionarioListNewCuestionario = em.merge(cuestionarioListNewCuestionario);
+                    if (oldCrIdAsignaturaOfCuestionarioListNewCuestionario != null && !oldCrIdAsignaturaOfCuestionarioListNewCuestionario.equals(asignatura)) {
+                        oldCrIdAsignaturaOfCuestionarioListNewCuestionario.getCuestionarioList().remove(cuestionarioListNewCuestionario);
+                        oldCrIdAsignaturaOfCuestionarioListNewCuestionario = em.merge(oldCrIdAsignaturaOfCuestionarioListNewCuestionario);
+                    }
+                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -162,7 +166,7 @@ public class AsignaturaJpaController implements Serializable {
         }
     }
 
-    public void destroy(BigDecimal id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(BigDecimal id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -174,21 +178,20 @@ public class AsignaturaJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The asignatura with id " + id + " no longer exists.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            AnioLectivo anioLectivoOrphanCheck = asignatura.getAnioLectivo();
-            if (anioLectivoOrphanCheck != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Asignatura (" + asignatura + ") cannot be destroyed since the AnioLectivo " + anioLectivoOrphanCheck + " in its anioLectivo field has a non-nullable asignatura field.");
+            Curso asIdcurso = asignatura.getAsIdcurso();
+            if (asIdcurso != null) {
+                asIdcurso.getAsignaturaList().remove(asignatura);
+                asIdcurso = em.merge(asIdcurso);
             }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
+            PersonaAsignatura idPersonaA = asignatura.getIdPersonaA();
+            if (idPersonaA != null) {
+                idPersonaA.getAsignaturaList().remove(asignatura);
+                idPersonaA = em.merge(idPersonaA);
             }
-            PersonaAsignatura personaAsignatura = asignatura.getPersonaAsignatura();
-            if (personaAsignatura != null) {
-                personaAsignatura.setAsignatura(null);
-                personaAsignatura = em.merge(personaAsignatura);
+            List<Cuestionario> cuestionarioList = asignatura.getCuestionarioList();
+            for (Cuestionario cuestionarioListCuestionario : cuestionarioList) {
+                cuestionarioListCuestionario.setCrIdAsignatura(null);
+                cuestionarioListCuestionario = em.merge(cuestionarioListCuestionario);
             }
             em.remove(asignatura);
             em.getTransaction().commit();

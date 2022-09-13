@@ -5,13 +5,13 @@
  */
 package Control;
 
+import Modelo.Usuario;
 import Modelo.UsuarioJpaController;
 import Vista.ViewMenuEstudiante;
 import Vista.ViewMenuProfesor;
 import Vista.viewLogindatos;
 import Vista.viewMenuAdmin;
-import javax.persistence.PersistenceException;
-import javax.swing.JOptionPane;
+import java.math.BigDecimal;
 import kidsgames.ManagerFactory;
 
 /**
@@ -38,31 +38,34 @@ public class Controller_login {
     }
 
     public void iniciarcontrol() {
-        vista.getEntrar().addActionListener(l -> controlLogin());
-        vista.getCerrar().addActionListener(l -> System.exit(0));
+        vista.getBt_iniciar().addActionListener(l -> controlLogin());
+        // vista.getCerrar().addActionListener(l -> System.exit(0));
     }
 
     public void controlLogin() {
-        
+
         String usuario = vista.getTxtusuarioLogin().getText();
         String contraseña = new String(vista.getTxtcontraseñaLogin().getPassword());
+        String rol = "administrador";
         try {
-            Usuario user = modelo.buscarByCredenciales(usuario, contraseña);
+            Usuario user = modelo.buscarByCredenciales(usuario, contraseña, rol);
+            if (user!=null && !usuario.equals("") || !contraseña.equals("") || !rol.equals("administrador")) {
+                System.out.println("entro al primer if");
 
-            if (user != null) {
-                System.out.println("usuario correcto");
-                //JOptionPane.showMessageDialog(vista, "Usuario correcto" + " " + user.getIdpersona().toString());
-                admin.setVisible(true);
-                new controladmin(admin, manager);
-                vista.setVisible(false);
+                if (user != null && rol.equals("administrador")) {
+                    viewMenuAdmin a = new viewMenuAdmin();
+                    System.out.println("estoy dentro ");
+                    a.setVisible(true);
+//                        admin.setVisible(true);
+                    vista.setVisible(false);
+                } else {
+                    System.out.println("Tu si puedes no te rindas");
+                }
 
-            } else {
-                JOptionPane.showMessageDialog(vista, "Usuario incorrecto");
             }
-        } catch (PersistenceException e) {
-            JOptionPane.showMessageDialog(vista, "no existe conecion con la base de datos");
+        } catch (Exception e) {
+            System.out.println("no entro");
         }
-
     }
 
 }

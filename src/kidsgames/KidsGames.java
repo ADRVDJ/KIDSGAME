@@ -5,6 +5,9 @@
  */
 package kidsgames;
 
+import Control.Controller_login;
+import Modelo.UsuarioJpaController;
+import Vista.viewLogindatos;
 import Vista.viewlogin;
 
 /**
@@ -17,8 +20,13 @@ public class KidsGames {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        viewlogin vista = new viewlogin();
-        vista.setVisible(true);
+        
+        ManagerFactory manager = new ManagerFactory();
+        viewLogindatos vista = new viewLogindatos();
+
+        UsuarioJpaController modelo = new UsuarioJpaController(manager.getentityManagerFactory());
+        Controller_login controlador = new Controller_login(manager, vista, modelo);
+
     }
-    
+
 }

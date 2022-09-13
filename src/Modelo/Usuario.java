@@ -8,7 +8,6 @@ package Modelo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,13 +15,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Shalva
+ * @author ASUS TUF GAMING
  */
 @Entity
 @Table(name = "USUARIO")
@@ -47,11 +45,12 @@ public class Usuario implements Serializable {
     private String usContraseña;
     @Column(name = "US_PERMISOS")
     private String usPermisos;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private Persona persona;
-    @JoinColumn(name = "ID_ROL", referencedColumnName = "ID_ROL")
+    @JoinColumn(name = "US_ID_PERSONA", referencedColumnName = "ID_PERSONA")
     @ManyToOne
-    private Rol idRol;
+    private Persona usIdPersona;
+    @JoinColumn(name = "US_ID_ROL", referencedColumnName = "ID_ROL")
+    @ManyToOne
+    private Rol usIdRol;
 
     public Usuario() {
     }
@@ -92,20 +91,20 @@ public class Usuario implements Serializable {
         this.usPermisos = usPermisos;
     }
 
-    public Persona getPersona() {
-        return persona;
+    public Persona getUsIdPersona() {
+        return usIdPersona;
     }
 
-    public void setPersona(Persona persona) {
-        this.persona = persona;
+    public void setUsIdPersona(Persona usIdPersona) {
+        this.usIdPersona = usIdPersona;
     }
 
-    public Rol getIdRol() {
-        return idRol;
+    public Rol getUsIdRol() {
+        return usIdRol;
     }
 
-    public void setIdRol(Rol idRol) {
-        this.idRol = idRol;
+    public void setUsIdRol(Rol usIdRol) {
+        this.usIdRol = usIdRol;
     }
 
     @Override
@@ -132,6 +131,5 @@ public class Usuario implements Serializable {
     public String toString() {
         return "Modelo.Usuario[ idUsuario=" + idUsuario + " ]";
     }
-    
     
 }

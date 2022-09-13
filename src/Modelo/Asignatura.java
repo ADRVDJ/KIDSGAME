@@ -7,22 +7,23 @@ package Modelo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Shalva
+ * @author ASUS TUF GAMING
  */
 @Entity
 @Table(name = "ASIGNATURA")
@@ -31,8 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Asignatura.findAll", query = "SELECT a FROM Asignatura a"),
     @NamedQuery(name = "Asignatura.findByIdAsignatura", query = "SELECT a FROM Asignatura a WHERE a.idAsignatura = :idAsignatura"),
     @NamedQuery(name = "Asignatura.findByAsNombre", query = "SELECT a FROM Asignatura a WHERE a.asNombre = :asNombre"),
-    @NamedQuery(name = "Asignatura.findByAsDescripcion", query = "SELECT a FROM Asignatura a WHERE a.asDescripcion = :asDescripcion"),
-    @NamedQuery(name = "Asignatura.findByIdUsuarioA", query = "SELECT a FROM Asignatura a WHERE a.idUsuarioA = :idUsuarioA")})
+    @NamedQuery(name = "Asignatura.findByAsDescripcion", query = "SELECT a FROM Asignatura a WHERE a.asDescripcion = :asDescripcion")})
 public class Asignatura implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,13 +45,14 @@ public class Asignatura implements Serializable {
     private String asNombre;
     @Column(name = "AS_DESCRIPCION")
     private String asDescripcion;
-    @Column(name = "ID_USUARIO_A")
-    private BigInteger idUsuarioA;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "asignatura")
-    private AnioLectivo anioLectivo;
-    @JoinColumn(name = "ID_ASIGNATURA", referencedColumnName = "ID_USUARIO_A", insertable = false, updatable = false)
-    @OneToOne(optional = false)
-    private PersonaAsignatura personaAsignatura;
+    @OneToMany(mappedBy = "crIdAsignatura")
+    private List<Cuestionario> cuestionarioList;
+    @JoinColumn(name = "AS_IDCURSO", referencedColumnName = "ID_CURSO")
+    @ManyToOne
+    private Curso asIdcurso;
+    @JoinColumn(name = "ID_PERSONA_A", referencedColumnName = "ID_PERSONA_A")
+    @ManyToOne
+    private PersonaAsignatura idPersonaA;
 
     public Asignatura() {
     }
@@ -84,28 +85,29 @@ public class Asignatura implements Serializable {
         this.asDescripcion = asDescripcion;
     }
 
-    public BigInteger getIdUsuarioA() {
-        return idUsuarioA;
+    @XmlTransient
+    public List<Cuestionario> getCuestionarioList() {
+        return cuestionarioList;
     }
 
-    public void setIdUsuarioA(BigInteger idUsuarioA) {
-        this.idUsuarioA = idUsuarioA;
+    public void setCuestionarioList(List<Cuestionario> cuestionarioList) {
+        this.cuestionarioList = cuestionarioList;
     }
 
-    public AnioLectivo getAnioLectivo() {
-        return anioLectivo;
+    public Curso getAsIdcurso() {
+        return asIdcurso;
     }
 
-    public void setAnioLectivo(AnioLectivo anioLectivo) {
-        this.anioLectivo = anioLectivo;
+    public void setAsIdcurso(Curso asIdcurso) {
+        this.asIdcurso = asIdcurso;
     }
 
-    public PersonaAsignatura getPersonaAsignatura() {
-        return personaAsignatura;
+    public PersonaAsignatura getIdPersonaA() {
+        return idPersonaA;
     }
 
-    public void setPersonaAsignatura(PersonaAsignatura personaAsignatura) {
-        this.personaAsignatura = personaAsignatura;
+    public void setIdPersonaA(PersonaAsignatura idPersonaA) {
+        this.idPersonaA = idPersonaA;
     }
 
     @Override

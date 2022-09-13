@@ -154,7 +154,6 @@ public class viewLogindatos extends javax.swing.JFrame {
         bt_salir.setBackground(new java.awt.Color(255, 153, 153));
         bt_salir.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         bt_salir.setForeground(new java.awt.Color(255, 255, 255));
-        bt_salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cross-small-free-icon-font.png"))); // NOI18N
         bt_salir.setText("SALIR");
         jPanel1.add(bt_salir, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 30, -1, -1));
 
