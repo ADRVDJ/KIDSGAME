@@ -228,7 +228,7 @@ public class UsuarioJpaController implements Serializable {
             if (usuario.getUsUsuario().equals(us) && usuario.getUsContraseña().equals(pasw) && usuario.getIdRol().equals(rol)) {
                 u = usuario;
             }
-        }
+        }   
         return u;
     }
 }
