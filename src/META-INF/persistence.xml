@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="KidsGamesPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>Modelo.Usuario</class>
+    <class>Modelo.Curso</class>
+    <class>Modelo.PersonaAsignatura</class>
+    <class>Modelo.AnioLectivo</class>
+    <class>Modelo.Rol</class>
+    <class>Modelo.PuntajeCuestionario</class>
+    <class>Modelo.Persona</class>
+    <class>Modelo.Juegos</class>
+    <class>Modelo.Asignatura</class>
+    <class>Modelo.Respuestas</class>
+    <class>Modelo.Cuestionario</class>
+    <class>Modelo.Preguntas</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
+      <property name="javax.persistence.jdbc.user" value="BaseU4"/>
+      <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
+      <property name="javax.persistence.jdbc.password" value="123"/>
+    </properties>
+  </persistence-unit>
+</persistence>
