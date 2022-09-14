@@ -34,36 +34,27 @@ public class RespuestasJpaController implements Serializable {
     }
 
     public void create(Respuestas respuestas) throws PreexistingEntityException, Exception {
-        if (respuestas.getPuntajeCuestionarioList() == null) {
-            respuestas.setPuntajeCuestionarioList(new ArrayList<PuntajeCuestionario>());
+        if (respuestas.getPreguntasList() == null) {
+            respuestas.setPreguntasList(new ArrayList<Preguntas>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Preguntas rsIdPregunta = respuestas.getRsIdPregunta();
-            if (rsIdPregunta != null) {
-                rsIdPregunta = em.getReference(rsIdPregunta.getClass(), rsIdPregunta.getIdPregunta());
-                respuestas.setRsIdPregunta(rsIdPregunta);
+            List<Preguntas> attachedPreguntasList = new ArrayList<Preguntas>();
+            for (Preguntas preguntasListPreguntasToAttach : respuestas.getPreguntasList()) {
+                preguntasListPreguntasToAttach = em.getReference(preguntasListPreguntasToAttach.getClass(), preguntasListPreguntasToAttach.getIdPregunta());
+                attachedPreguntasList.add(preguntasListPreguntasToAttach);
             }
-            List<PuntajeCuestionario> attachedPuntajeCuestionarioList = new ArrayList<PuntajeCuestionario>();
-            for (PuntajeCuestionario puntajeCuestionarioListPuntajeCuestionarioToAttach : respuestas.getPuntajeCuestionarioList()) {
-                puntajeCuestionarioListPuntajeCuestionarioToAttach = em.getReference(puntajeCuestionarioListPuntajeCuestionarioToAttach.getClass(), puntajeCuestionarioListPuntajeCuestionarioToAttach.getIdPuntaje());
-                attachedPuntajeCuestionarioList.add(puntajeCuestionarioListPuntajeCuestionarioToAttach);
-            }
-            respuestas.setPuntajeCuestionarioList(attachedPuntajeCuestionarioList);
+            respuestas.setPreguntasList(attachedPreguntasList);
             em.persist(respuestas);
-            if (rsIdPregunta != null) {
-                rsIdPregunta.getRespuestasList().add(respuestas);
-                rsIdPregunta = em.merge(rsIdPregunta);
-            }
-            for (PuntajeCuestionario puntajeCuestionarioListPuntajeCuestionario : respuestas.getPuntajeCuestionarioList()) {
-                Respuestas oldPcIdRespuestaOfPuntajeCuestionarioListPuntajeCuestionario = puntajeCuestionarioListPuntajeCuestionario.getPcIdRespuesta();
-                puntajeCuestionarioListPuntajeCuestionario.setPcIdRespuesta(respuestas);
-                puntajeCuestionarioListPuntajeCuestionario = em.merge(puntajeCuestionarioListPuntajeCuestionario);
-                if (oldPcIdRespuestaOfPuntajeCuestionarioListPuntajeCuestionario != null) {
-                    oldPcIdRespuestaOfPuntajeCuestionarioListPuntajeCuestionario.getPuntajeCuestionarioList().remove(puntajeCuestionarioListPuntajeCuestionario);
-                    oldPcIdRespuestaOfPuntajeCuestionarioListPuntajeCuestionario = em.merge(oldPcIdRespuestaOfPuntajeCuestionarioListPuntajeCuestionario);
+            for (Preguntas preguntasListPreguntas : respuestas.getPreguntasList()) {
+                Respuestas oldPrIdRespuestasOfPreguntasListPreguntas = preguntasListPreguntas.getPrIdRespuestas();
+                preguntasListPreguntas.setPrIdRespuestas(respuestas);
+                preguntasListPreguntas = em.merge(preguntasListPreguntas);
+                if (oldPrIdRespuestasOfPreguntasListPreguntas != null) {
+                    oldPrIdRespuestasOfPreguntasListPreguntas.getPreguntasList().remove(preguntasListPreguntas);
+                    oldPrIdRespuestasOfPreguntasListPreguntas = em.merge(oldPrIdRespuestasOfPreguntasListPreguntas);
                 }
             }
             em.getTransaction().commit();
@@ -85,44 +76,30 @@ public class RespuestasJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Respuestas persistentRespuestas = em.find(Respuestas.class, respuestas.getIdRespuesta());
-            Preguntas rsIdPreguntaOld = persistentRespuestas.getRsIdPregunta();
-            Preguntas rsIdPreguntaNew = respuestas.getRsIdPregunta();
-            List<PuntajeCuestionario> puntajeCuestionarioListOld = persistentRespuestas.getPuntajeCuestionarioList();
-            List<PuntajeCuestionario> puntajeCuestionarioListNew = respuestas.getPuntajeCuestionarioList();
-            if (rsIdPreguntaNew != null) {
-                rsIdPreguntaNew = em.getReference(rsIdPreguntaNew.getClass(), rsIdPreguntaNew.getIdPregunta());
-                respuestas.setRsIdPregunta(rsIdPreguntaNew);
+            List<Preguntas> preguntasListOld = persistentRespuestas.getPreguntasList();
+            List<Preguntas> preguntasListNew = respuestas.getPreguntasList();
+            List<Preguntas> attachedPreguntasListNew = new ArrayList<Preguntas>();
+            for (Preguntas preguntasListNewPreguntasToAttach : preguntasListNew) {
+                preguntasListNewPreguntasToAttach = em.getReference(preguntasListNewPreguntasToAttach.getClass(), preguntasListNewPreguntasToAttach.getIdPregunta());
+                attachedPreguntasListNew.add(preguntasListNewPreguntasToAttach);
             }
-            List<PuntajeCuestionario> attachedPuntajeCuestionarioListNew = new ArrayList<PuntajeCuestionario>();
-            for (PuntajeCuestionario puntajeCuestionarioListNewPuntajeCuestionarioToAttach : puntajeCuestionarioListNew) {
-                puntajeCuestionarioListNewPuntajeCuestionarioToAttach = em.getReference(puntajeCuestionarioListNewPuntajeCuestionarioToAttach.getClass(), puntajeCuestionarioListNewPuntajeCuestionarioToAttach.getIdPuntaje());
-                attachedPuntajeCuestionarioListNew.add(puntajeCuestionarioListNewPuntajeCuestionarioToAttach);
-            }
-            puntajeCuestionarioListNew = attachedPuntajeCuestionarioListNew;
-            respuestas.setPuntajeCuestionarioList(puntajeCuestionarioListNew);
+            preguntasListNew = attachedPreguntasListNew;
+            respuestas.setPreguntasList(preguntasListNew);
             respuestas = em.merge(respuestas);
-            if (rsIdPreguntaOld != null && !rsIdPreguntaOld.equals(rsIdPreguntaNew)) {
-                rsIdPreguntaOld.getRespuestasList().remove(respuestas);
-                rsIdPreguntaOld = em.merge(rsIdPreguntaOld);
-            }
-            if (rsIdPreguntaNew != null && !rsIdPreguntaNew.equals(rsIdPreguntaOld)) {
-                rsIdPreguntaNew.getRespuestasList().add(respuestas);
-                rsIdPreguntaNew = em.merge(rsIdPreguntaNew);
-            }
-            for (PuntajeCuestionario puntajeCuestionarioListOldPuntajeCuestionario : puntajeCuestionarioListOld) {
-                if (!puntajeCuestionarioListNew.contains(puntajeCuestionarioListOldPuntajeCuestionario)) {
-                    puntajeCuestionarioListOldPuntajeCuestionario.setPcIdRespuesta(null);
-                    puntajeCuestionarioListOldPuntajeCuestionario = em.merge(puntajeCuestionarioListOldPuntajeCuestionario);
+            for (Preguntas preguntasListOldPreguntas : preguntasListOld) {
+                if (!preguntasListNew.contains(preguntasListOldPreguntas)) {
+                    preguntasListOldPreguntas.setPrIdRespuestas(null);
+                    preguntasListOldPreguntas = em.merge(preguntasListOldPreguntas);
                 }
             }
-            for (PuntajeCuestionario puntajeCuestionarioListNewPuntajeCuestionario : puntajeCuestionarioListNew) {
-                if (!puntajeCuestionarioListOld.contains(puntajeCuestionarioListNewPuntajeCuestionario)) {
-                    Respuestas oldPcIdRespuestaOfPuntajeCuestionarioListNewPuntajeCuestionario = puntajeCuestionarioListNewPuntajeCuestionario.getPcIdRespuesta();
-                    puntajeCuestionarioListNewPuntajeCuestionario.setPcIdRespuesta(respuestas);
-                    puntajeCuestionarioListNewPuntajeCuestionario = em.merge(puntajeCuestionarioListNewPuntajeCuestionario);
-                    if (oldPcIdRespuestaOfPuntajeCuestionarioListNewPuntajeCuestionario != null && !oldPcIdRespuestaOfPuntajeCuestionarioListNewPuntajeCuestionario.equals(respuestas)) {
-                        oldPcIdRespuestaOfPuntajeCuestionarioListNewPuntajeCuestionario.getPuntajeCuestionarioList().remove(puntajeCuestionarioListNewPuntajeCuestionario);
-                        oldPcIdRespuestaOfPuntajeCuestionarioListNewPuntajeCuestionario = em.merge(oldPcIdRespuestaOfPuntajeCuestionarioListNewPuntajeCuestionario);
+            for (Preguntas preguntasListNewPreguntas : preguntasListNew) {
+                if (!preguntasListOld.contains(preguntasListNewPreguntas)) {
+                    Respuestas oldPrIdRespuestasOfPreguntasListNewPreguntas = preguntasListNewPreguntas.getPrIdRespuestas();
+                    preguntasListNewPreguntas.setPrIdRespuestas(respuestas);
+                    preguntasListNewPreguntas = em.merge(preguntasListNewPreguntas);
+                    if (oldPrIdRespuestasOfPreguntasListNewPreguntas != null && !oldPrIdRespuestasOfPreguntasListNewPreguntas.equals(respuestas)) {
+                        oldPrIdRespuestasOfPreguntasListNewPreguntas.getPreguntasList().remove(preguntasListNewPreguntas);
+                        oldPrIdRespuestasOfPreguntasListNewPreguntas = em.merge(oldPrIdRespuestasOfPreguntasListNewPreguntas);
                     }
                 }
             }
@@ -155,15 +132,10 @@ public class RespuestasJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The respuestas with id " + id + " no longer exists.", enfe);
             }
-            Preguntas rsIdPregunta = respuestas.getRsIdPregunta();
-            if (rsIdPregunta != null) {
-                rsIdPregunta.getRespuestasList().remove(respuestas);
-                rsIdPregunta = em.merge(rsIdPregunta);
-            }
-            List<PuntajeCuestionario> puntajeCuestionarioList = respuestas.getPuntajeCuestionarioList();
-            for (PuntajeCuestionario puntajeCuestionarioListPuntajeCuestionario : puntajeCuestionarioList) {
-                puntajeCuestionarioListPuntajeCuestionario.setPcIdRespuesta(null);
-                puntajeCuestionarioListPuntajeCuestionario = em.merge(puntajeCuestionarioListPuntajeCuestionario);
+            List<Preguntas> preguntasList = respuestas.getPreguntasList();
+            for (Preguntas preguntasListPreguntas : preguntasList) {
+                preguntasListPreguntas.setPrIdRespuestas(null);
+                preguntasListPreguntas = em.merge(preguntasListPreguntas);
             }
             em.remove(respuestas);
             em.getTransaction().commit();

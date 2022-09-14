@@ -7,6 +7,7 @@ package Modelo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -27,7 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PuntajeCuestionario.findAll", query = "SELECT p FROM PuntajeCuestionario p"),
-    @NamedQuery(name = "PuntajeCuestionario.findByIdPuntaje", query = "SELECT p FROM PuntajeCuestionario p WHERE p.idPuntaje = :idPuntaje")})
+    @NamedQuery(name = "PuntajeCuestionario.findByIdPuntaje", query = "SELECT p FROM PuntajeCuestionario p WHERE p.idPuntaje = :idPuntaje"),
+    @NamedQuery(name = "PuntajeCuestionario.findByPcFechaInicio", query = "SELECT p FROM PuntajeCuestionario p WHERE p.pcFechaInicio = :pcFechaInicio"),
+    @NamedQuery(name = "PuntajeCuestionario.findByPcFechaFin", query = "SELECT p FROM PuntajeCuestionario p WHERE p.pcFechaFin = :pcFechaFin")})
 public class PuntajeCuestionario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,15 +41,18 @@ public class PuntajeCuestionario implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID_PUNTAJE")
     private BigDecimal idPuntaje;
+    @Column(name = "PC_FECHA_INICIO")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date pcFechaInicio;
+    @Column(name = "PC_FECHA_FIN")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date pcFechaFin;
     @JoinColumn(name = "PC_ID_CUESTIONARIO", referencedColumnName = "ID_CUESTIONARIO")
     @ManyToOne
     private Cuestionario pcIdCuestionario;
     @JoinColumn(name = "PC_ID_PERSONA", referencedColumnName = "ID_PERSONA")
     @ManyToOne
     private Persona pcIdPersona;
-    @JoinColumn(name = "PC_ID_RESPUESTA", referencedColumnName = "ID_RESPUESTA")
-    @ManyToOne
-    private Respuestas pcIdRespuesta;
 
     public PuntajeCuestionario() {
     }
@@ -61,6 +69,22 @@ public class PuntajeCuestionario implements Serializable {
         this.idPuntaje = idPuntaje;
     }
 
+    public Date getPcFechaInicio() {
+        return pcFechaInicio;
+    }
+
+    public void setPcFechaInicio(Date pcFechaInicio) {
+        this.pcFechaInicio = pcFechaInicio;
+    }
+
+    public Date getPcFechaFin() {
+        return pcFechaFin;
+    }
+
+    public void setPcFechaFin(Date pcFechaFin) {
+        this.pcFechaFin = pcFechaFin;
+    }
+
     public Cuestionario getPcIdCuestionario() {
         return pcIdCuestionario;
     }
@@ -75,14 +99,6 @@ public class PuntajeCuestionario implements Serializable {
 
     public void setPcIdPersona(Persona pcIdPersona) {
         this.pcIdPersona = pcIdPersona;
-    }
-
-    public Respuestas getPcIdRespuesta() {
-        return pcIdRespuesta;
-    }
-
-    public void setPcIdRespuesta(Respuestas pcIdRespuesta) {
-        this.pcIdRespuesta = pcIdRespuesta;
     }
 
     @Override

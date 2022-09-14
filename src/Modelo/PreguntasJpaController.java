@@ -9,14 +9,13 @@ import Modelo.exceptions.NonexistentEntityException;
 import Modelo.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -34,9 +33,6 @@ public class PreguntasJpaController implements Serializable {
     }
 
     public void create(Preguntas preguntas) throws PreexistingEntityException, Exception {
-        if (preguntas.getRespuestasList() == null) {
-            preguntas.setRespuestasList(new ArrayList<Respuestas>());
-        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -46,25 +42,19 @@ public class PreguntasJpaController implements Serializable {
                 prIdCuestionario = em.getReference(prIdCuestionario.getClass(), prIdCuestionario.getIdCuestionario());
                 preguntas.setPrIdCuestionario(prIdCuestionario);
             }
-            List<Respuestas> attachedRespuestasList = new ArrayList<Respuestas>();
-            for (Respuestas respuestasListRespuestasToAttach : preguntas.getRespuestasList()) {
-                respuestasListRespuestasToAttach = em.getReference(respuestasListRespuestasToAttach.getClass(), respuestasListRespuestasToAttach.getIdRespuesta());
-                attachedRespuestasList.add(respuestasListRespuestasToAttach);
+            Respuestas prIdRespuestas = preguntas.getPrIdRespuestas();
+            if (prIdRespuestas != null) {
+                prIdRespuestas = em.getReference(prIdRespuestas.getClass(), prIdRespuestas.getIdRespuesta());
+                preguntas.setPrIdRespuestas(prIdRespuestas);
             }
-            preguntas.setRespuestasList(attachedRespuestasList);
             em.persist(preguntas);
             if (prIdCuestionario != null) {
                 prIdCuestionario.getPreguntasList().add(preguntas);
                 prIdCuestionario = em.merge(prIdCuestionario);
             }
-            for (Respuestas respuestasListRespuestas : preguntas.getRespuestasList()) {
-                Preguntas oldRsIdPreguntaOfRespuestasListRespuestas = respuestasListRespuestas.getRsIdPregunta();
-                respuestasListRespuestas.setRsIdPregunta(preguntas);
-                respuestasListRespuestas = em.merge(respuestasListRespuestas);
-                if (oldRsIdPreguntaOfRespuestasListRespuestas != null) {
-                    oldRsIdPreguntaOfRespuestasListRespuestas.getRespuestasList().remove(respuestasListRespuestas);
-                    oldRsIdPreguntaOfRespuestasListRespuestas = em.merge(oldRsIdPreguntaOfRespuestasListRespuestas);
-                }
+            if (prIdRespuestas != null) {
+                prIdRespuestas.getPreguntasList().add(preguntas);
+                prIdRespuestas = em.merge(prIdRespuestas);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -87,19 +77,16 @@ public class PreguntasJpaController implements Serializable {
             Preguntas persistentPreguntas = em.find(Preguntas.class, preguntas.getIdPregunta());
             Cuestionario prIdCuestionarioOld = persistentPreguntas.getPrIdCuestionario();
             Cuestionario prIdCuestionarioNew = preguntas.getPrIdCuestionario();
-            List<Respuestas> respuestasListOld = persistentPreguntas.getRespuestasList();
-            List<Respuestas> respuestasListNew = preguntas.getRespuestasList();
+            Respuestas prIdRespuestasOld = persistentPreguntas.getPrIdRespuestas();
+            Respuestas prIdRespuestasNew = preguntas.getPrIdRespuestas();
             if (prIdCuestionarioNew != null) {
                 prIdCuestionarioNew = em.getReference(prIdCuestionarioNew.getClass(), prIdCuestionarioNew.getIdCuestionario());
                 preguntas.setPrIdCuestionario(prIdCuestionarioNew);
             }
-            List<Respuestas> attachedRespuestasListNew = new ArrayList<Respuestas>();
-            for (Respuestas respuestasListNewRespuestasToAttach : respuestasListNew) {
-                respuestasListNewRespuestasToAttach = em.getReference(respuestasListNewRespuestasToAttach.getClass(), respuestasListNewRespuestasToAttach.getIdRespuesta());
-                attachedRespuestasListNew.add(respuestasListNewRespuestasToAttach);
+            if (prIdRespuestasNew != null) {
+                prIdRespuestasNew = em.getReference(prIdRespuestasNew.getClass(), prIdRespuestasNew.getIdRespuesta());
+                preguntas.setPrIdRespuestas(prIdRespuestasNew);
             }
-            respuestasListNew = attachedRespuestasListNew;
-            preguntas.setRespuestasList(respuestasListNew);
             preguntas = em.merge(preguntas);
             if (prIdCuestionarioOld != null && !prIdCuestionarioOld.equals(prIdCuestionarioNew)) {
                 prIdCuestionarioOld.getPreguntasList().remove(preguntas);
@@ -109,22 +96,13 @@ public class PreguntasJpaController implements Serializable {
                 prIdCuestionarioNew.getPreguntasList().add(preguntas);
                 prIdCuestionarioNew = em.merge(prIdCuestionarioNew);
             }
-            for (Respuestas respuestasListOldRespuestas : respuestasListOld) {
-                if (!respuestasListNew.contains(respuestasListOldRespuestas)) {
-                    respuestasListOldRespuestas.setRsIdPregunta(null);
-                    respuestasListOldRespuestas = em.merge(respuestasListOldRespuestas);
-                }
+            if (prIdRespuestasOld != null && !prIdRespuestasOld.equals(prIdRespuestasNew)) {
+                prIdRespuestasOld.getPreguntasList().remove(preguntas);
+                prIdRespuestasOld = em.merge(prIdRespuestasOld);
             }
-            for (Respuestas respuestasListNewRespuestas : respuestasListNew) {
-                if (!respuestasListOld.contains(respuestasListNewRespuestas)) {
-                    Preguntas oldRsIdPreguntaOfRespuestasListNewRespuestas = respuestasListNewRespuestas.getRsIdPregunta();
-                    respuestasListNewRespuestas.setRsIdPregunta(preguntas);
-                    respuestasListNewRespuestas = em.merge(respuestasListNewRespuestas);
-                    if (oldRsIdPreguntaOfRespuestasListNewRespuestas != null && !oldRsIdPreguntaOfRespuestasListNewRespuestas.equals(preguntas)) {
-                        oldRsIdPreguntaOfRespuestasListNewRespuestas.getRespuestasList().remove(respuestasListNewRespuestas);
-                        oldRsIdPreguntaOfRespuestasListNewRespuestas = em.merge(oldRsIdPreguntaOfRespuestasListNewRespuestas);
-                    }
-                }
+            if (prIdRespuestasNew != null && !prIdRespuestasNew.equals(prIdRespuestasOld)) {
+                prIdRespuestasNew.getPreguntasList().add(preguntas);
+                prIdRespuestasNew = em.merge(prIdRespuestasNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -160,10 +138,10 @@ public class PreguntasJpaController implements Serializable {
                 prIdCuestionario.getPreguntasList().remove(preguntas);
                 prIdCuestionario = em.merge(prIdCuestionario);
             }
-            List<Respuestas> respuestasList = preguntas.getRespuestasList();
-            for (Respuestas respuestasListRespuestas : respuestasList) {
-                respuestasListRespuestas.setRsIdPregunta(null);
-                respuestasListRespuestas = em.merge(respuestasListRespuestas);
+            Respuestas prIdRespuestas = preguntas.getPrIdRespuestas();
+            if (prIdRespuestas != null) {
+                prIdRespuestas.getPreguntasList().remove(preguntas);
+                prIdRespuestas = em.merge(prIdRespuestas);
             }
             em.remove(preguntas);
             em.getTransaction().commit();

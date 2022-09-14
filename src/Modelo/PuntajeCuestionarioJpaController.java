@@ -47,11 +47,6 @@ public class PuntajeCuestionarioJpaController implements Serializable {
                 pcIdPersona = em.getReference(pcIdPersona.getClass(), pcIdPersona.getIdPersona());
                 puntajeCuestionario.setPcIdPersona(pcIdPersona);
             }
-            Respuestas pcIdRespuesta = puntajeCuestionario.getPcIdRespuesta();
-            if (pcIdRespuesta != null) {
-                pcIdRespuesta = em.getReference(pcIdRespuesta.getClass(), pcIdRespuesta.getIdRespuesta());
-                puntajeCuestionario.setPcIdRespuesta(pcIdRespuesta);
-            }
             em.persist(puntajeCuestionario);
             if (pcIdCuestionario != null) {
                 pcIdCuestionario.getPuntajeCuestionarioList().add(puntajeCuestionario);
@@ -60,10 +55,6 @@ public class PuntajeCuestionarioJpaController implements Serializable {
             if (pcIdPersona != null) {
                 pcIdPersona.getPuntajeCuestionarioList().add(puntajeCuestionario);
                 pcIdPersona = em.merge(pcIdPersona);
-            }
-            if (pcIdRespuesta != null) {
-                pcIdRespuesta.getPuntajeCuestionarioList().add(puntajeCuestionario);
-                pcIdRespuesta = em.merge(pcIdRespuesta);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -88,8 +79,6 @@ public class PuntajeCuestionarioJpaController implements Serializable {
             Cuestionario pcIdCuestionarioNew = puntajeCuestionario.getPcIdCuestionario();
             Persona pcIdPersonaOld = persistentPuntajeCuestionario.getPcIdPersona();
             Persona pcIdPersonaNew = puntajeCuestionario.getPcIdPersona();
-            Respuestas pcIdRespuestaOld = persistentPuntajeCuestionario.getPcIdRespuesta();
-            Respuestas pcIdRespuestaNew = puntajeCuestionario.getPcIdRespuesta();
             if (pcIdCuestionarioNew != null) {
                 pcIdCuestionarioNew = em.getReference(pcIdCuestionarioNew.getClass(), pcIdCuestionarioNew.getIdCuestionario());
                 puntajeCuestionario.setPcIdCuestionario(pcIdCuestionarioNew);
@@ -97,10 +86,6 @@ public class PuntajeCuestionarioJpaController implements Serializable {
             if (pcIdPersonaNew != null) {
                 pcIdPersonaNew = em.getReference(pcIdPersonaNew.getClass(), pcIdPersonaNew.getIdPersona());
                 puntajeCuestionario.setPcIdPersona(pcIdPersonaNew);
-            }
-            if (pcIdRespuestaNew != null) {
-                pcIdRespuestaNew = em.getReference(pcIdRespuestaNew.getClass(), pcIdRespuestaNew.getIdRespuesta());
-                puntajeCuestionario.setPcIdRespuesta(pcIdRespuestaNew);
             }
             puntajeCuestionario = em.merge(puntajeCuestionario);
             if (pcIdCuestionarioOld != null && !pcIdCuestionarioOld.equals(pcIdCuestionarioNew)) {
@@ -118,14 +103,6 @@ public class PuntajeCuestionarioJpaController implements Serializable {
             if (pcIdPersonaNew != null && !pcIdPersonaNew.equals(pcIdPersonaOld)) {
                 pcIdPersonaNew.getPuntajeCuestionarioList().add(puntajeCuestionario);
                 pcIdPersonaNew = em.merge(pcIdPersonaNew);
-            }
-            if (pcIdRespuestaOld != null && !pcIdRespuestaOld.equals(pcIdRespuestaNew)) {
-                pcIdRespuestaOld.getPuntajeCuestionarioList().remove(puntajeCuestionario);
-                pcIdRespuestaOld = em.merge(pcIdRespuestaOld);
-            }
-            if (pcIdRespuestaNew != null && !pcIdRespuestaNew.equals(pcIdRespuestaOld)) {
-                pcIdRespuestaNew.getPuntajeCuestionarioList().add(puntajeCuestionario);
-                pcIdRespuestaNew = em.merge(pcIdRespuestaNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -165,11 +142,6 @@ public class PuntajeCuestionarioJpaController implements Serializable {
             if (pcIdPersona != null) {
                 pcIdPersona.getPuntajeCuestionarioList().remove(puntajeCuestionario);
                 pcIdPersona = em.merge(pcIdPersona);
-            }
-            Respuestas pcIdRespuesta = puntajeCuestionario.getPcIdRespuesta();
-            if (pcIdRespuesta != null) {
-                pcIdRespuesta.getPuntajeCuestionarioList().remove(puntajeCuestionario);
-                pcIdRespuesta = em.merge(pcIdRespuesta);
             }
             em.remove(puntajeCuestionario);
             em.getTransaction().commit();

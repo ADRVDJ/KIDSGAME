@@ -197,6 +197,8 @@ public class UsuarioJpaController implements Serializable {
             em.close();
         }
     }
+    
+    
 
     public Usuario buscarByCredenciales(String us, String pasw) {
         Usuario u = null;
@@ -208,4 +210,5 @@ public class UsuarioJpaController implements Serializable {
         }
         return u;
     }
+
 }

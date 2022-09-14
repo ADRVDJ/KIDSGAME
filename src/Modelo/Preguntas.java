@@ -7,7 +7,6 @@ package Modelo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,10 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -45,8 +42,9 @@ public class Preguntas implements Serializable {
     @JoinColumn(name = "PR_ID_CUESTIONARIO", referencedColumnName = "ID_CUESTIONARIO")
     @ManyToOne
     private Cuestionario prIdCuestionario;
-    @OneToMany(mappedBy = "rsIdPregunta")
-    private List<Respuestas> respuestasList;
+    @JoinColumn(name = "PR_ID_RESPUESTAS", referencedColumnName = "ID_RESPUESTA")
+    @ManyToOne
+    private Respuestas prIdRespuestas;
 
     public Preguntas() {
     }
@@ -79,13 +77,12 @@ public class Preguntas implements Serializable {
         this.prIdCuestionario = prIdCuestionario;
     }
 
-    @XmlTransient
-    public List<Respuestas> getRespuestasList() {
-        return respuestasList;
+    public Respuestas getPrIdRespuestas() {
+        return prIdRespuestas;
     }
 
-    public void setRespuestasList(List<Respuestas> respuestasList) {
-        this.respuestasList = respuestasList;
+    public void setPrIdRespuestas(Respuestas prIdRespuestas) {
+        this.prIdRespuestas = prIdRespuestas;
     }
 
     @Override

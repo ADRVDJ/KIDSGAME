@@ -12,8 +12,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -45,11 +43,8 @@ public class Respuestas implements Serializable {
     private String rsRespuestac;
     @Column(name = "RS_RESPUESTAI")
     private String rsRespuestai;
-    @OneToMany(mappedBy = "pcIdRespuesta")
-    private List<PuntajeCuestionario> puntajeCuestionarioList;
-    @JoinColumn(name = "RS_ID_PREGUNTA", referencedColumnName = "ID_PREGUNTA")
-    @ManyToOne
-    private Preguntas rsIdPregunta;
+    @OneToMany(mappedBy = "prIdRespuestas")
+    private List<Preguntas> preguntasList;
 
     public Respuestas() {
     }
@@ -83,20 +78,12 @@ public class Respuestas implements Serializable {
     }
 
     @XmlTransient
-    public List<PuntajeCuestionario> getPuntajeCuestionarioList() {
-        return puntajeCuestionarioList;
+    public List<Preguntas> getPreguntasList() {
+        return preguntasList;
     }
 
-    public void setPuntajeCuestionarioList(List<PuntajeCuestionario> puntajeCuestionarioList) {
-        this.puntajeCuestionarioList = puntajeCuestionarioList;
-    }
-
-    public Preguntas getRsIdPregunta() {
-        return rsIdPregunta;
-    }
-
-    public void setRsIdPregunta(Preguntas rsIdPregunta) {
-        this.rsIdPregunta = rsIdPregunta;
+    public void setPreguntasList(List<Preguntas> preguntasList) {
+        this.preguntasList = preguntasList;
     }
 
     @Override
