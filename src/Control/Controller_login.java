@@ -5,6 +5,7 @@
  */
 package Control;
 
+import Interfaces.Lista_Estudiantes;
 import Modelo.Usuario;
 import Modelo.UsuarioJpaController;
 import Vista.ViewMenuEstudiante;
@@ -46,20 +47,29 @@ public class Controller_login {
 
         String usuario = vista.getTxtusuarioLogin().getText();
         String contraseña = new String(vista.getTxtcontraseñaLogin().getPassword());
-        String rol = "administrador";
-        try {
-            Usuario user = modelo.buscarByCredenciales(usuario, contraseña, rol);
-            if (user!=null && !usuario.equals("") || !contraseña.equals("") || !rol.equals("administrador")) {
-                System.out.println("entro al primer if");
 
-                if (user != null && rol.equals("administrador")) {
-                    viewMenuAdmin a = new viewMenuAdmin();
-                    System.out.println("estoy dentro ");
-                    a.setVisible(true);
-//                        admin.setVisible(true);
-                    vista.setVisible(false);
-                } else {
-                    System.out.println("Tu si puedes no te rindas");
+        try {
+
+            Usuario user = modelo.buscarByCredenciales(usuario, contraseña);
+
+            if (user != null && !usuario.equals("") || !contraseña.equals("")) {
+                System.out.println("entro al primer if");
+                switch (user.getUsIdRol().getRolNombre()) {
+                    case "Administrador":
+                        viewMenuAdmin a = new viewMenuAdmin();
+                        a.setVisible(true);
+                        vista.setVisible(false);
+                        break;
+                    case "Profesor":
+                        ViewMenuProfesor p = new ViewMenuProfesor();
+                        p.setVisible(true);
+                        vista.setVisible(false);
+                        break;
+                    case "Estudiante":
+                         ViewMenuEstudiante e = new ViewMenuEstudiante();
+                        e.setVisible(true);
+                        vista.setVisible(false);
+
                 }
 
             }
