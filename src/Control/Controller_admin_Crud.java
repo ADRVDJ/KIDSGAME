@@ -11,6 +11,8 @@ import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import kidsgames.ManagerFactory;
 
 /**
@@ -27,6 +29,7 @@ public class Controller_admin_Crud {
     Persona persona;
     JDesktopPane panelEscritorio;
     ModeloTablaAdmin modeloTablaAdmin;
+    ListSelectionModel listapersonamodel;
 
     public Controller_admin_Crud(viewCrearAdmin vista, ManagerFactory manage, PersonaJpaController modeloPersona, JDesktopPane panelEscritorio) {
         this.manage = manage;
@@ -57,8 +60,8 @@ public class Controller_admin_Crud {
         this.vista.getBtnEditar().addActionListener(l -> editarUsuario());
         this.vista.getBtnEliminar().addActionListener(l -> eliminarUsuario());
         this.vista.getTablaadministrador().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        listaUsernaModel = this.vista.getTablausuario().getSelectionModel();
-        listaUsernaModel.addListSelectionListener(new ListSelectionListener() {
+        listapersonamodel = this.vista.getTablaadministrador().getSelectionModel();
+        listapersonamodel.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
                     usuarioSeleccionado();
