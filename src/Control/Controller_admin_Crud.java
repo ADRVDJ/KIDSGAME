@@ -27,31 +27,28 @@ public class Controller_admin_Crud {
     JDesktopPane panelEscritorio;
     ModeloTablaAdmin modeloTablaAdmin;
 
-    public Controller_admin_Crud(viewCrearAdmin vista, ManagerFactory manage, UsuarioJpaController modeloUsuario, JDesktopPane panelEscritorio) {
+    public Controller_admin_Crud(viewCrearAdmin vista, ManagerFactory manage, PersonaJpaController modeloPersona, JDesktopPane panelEscritorio) {
         this.manage = manage;
         this.modeloPersona = modeloPersona;
-        this.modeloUsuario = modeloUsuario;
         this.panelEscritorio = panelEscritorio;
+        this.modeloTablaAdmin = new ModeloTablaAdmin();
+        this.modeloTablaAdmin.setFilas(modeloPersona.findPersonaEntities());
 
         if (controladminVistas.vp == null) {
-//            controladminVistas.vp = modeloPersona;
-//            this.vista = controladminVistas.vp;
+            controladminVistas.vp = new viewCrearAdmin();
+            this.vista = controladminVistas.vp;
             this.panelEscritorio.add(this.vista);
             this.vista.getTablaadministrador().setModel(modeloTablaAdmin);
             this.vista.show();
             iniciarControl();
+            //Para centar la vista en la ventana
             Dimension desktopSize = this.panelEscritorio.getSize();
             Dimension FrameSize = this.vista.getSize();
             this.vista.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
 
         } else {
-            controladminVistas.vu.show();
-
+            controladminVistas.vp.show();
         }
-    }
-
-    Controller_admin_Crud() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public void iniciarControl() {

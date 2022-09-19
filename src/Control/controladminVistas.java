@@ -36,7 +36,7 @@ public class controladminVistas extends javax.swing.JFrame {
     public static viewCuestionarios vu = null;
 
     public void cargarvistaPersona() {
-        new Controller_admin_Crud(vp, manage, new PersonaJpaController(manage.getentityManagerFactory()), this.vista.getEscritorio());
+        Controller_admin_Crud controller_admin_Crud = new Controller_admin_Crud(vp, manage, new  PersonaJpaController(manage.getentityManagerFactory()), this.vista.getEscritorio());
         System.out.println("mensaje");
     }
 
