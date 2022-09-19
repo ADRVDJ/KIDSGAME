@@ -114,7 +114,7 @@ public class Controller_admin_Crud {
 //        Resouces.success("Atención!!", "USUARIO EDITADA CORECTAMENTE");
         try {
             modeloUsuario.edit(usuario);
-           modeloPersona.eliminar(usuario);
+           modeloUsuario.eliminar(usuario);
            modelotabla.actualizar(usuario);
             limpiar();
         } catch (Exception ex) {
