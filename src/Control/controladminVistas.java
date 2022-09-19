@@ -19,12 +19,15 @@ public class controladminVistas extends javax.swing.JFrame {
 viewPersona vistaPer;
     viewMenuAdmin vista;
     ManagerFactory manage;
+    
+    
 
     public controladminVistas(viewMenuAdmin vista, ManagerFactory manage) {
         this.vista = vista;
         this.manage = manage;
         this.vista.setExtendedState(MAXIMIZED_BOTH);
         controlEvento();
+        System.out.println("Hola cambio 1");
     }
 
     public void controlEvento() {
