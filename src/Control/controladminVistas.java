@@ -5,9 +5,12 @@
  */
 package Control;
 
+import Modelo.PersonaAsignaturaJpaController;
+import Modelo.PersonaJpaController;
 import Vista.Administrador.viewCrearAdmin;
 import Vista.Subvista.viewCuestionarios;
 import Vista.Subvista.viewJuegos;
+import Vista.Subvista.viewPersona;
 import Vista.viewMenuAdmin;
 import kidsgames.ManagerFactory;
 
@@ -28,35 +31,26 @@ public class controladminVistas extends javax.swing.JFrame {
     }
 
     public void controlEvento() {
-        this.vista.geta.addActionListener(l -> cargarvistaPersona());
-        this.vista.getItemproducto().addActionListener(l -> cargarvistaProducto());
-        this.vista.getItemusuario().addActionListener(l -> cargarvistaUsuario());
+        this.vista.getAdmin().addActionListener(l -> cargarvistaPersona());
+        this.vista.getJuego().addActionListener(l -> cargarvistaProducto());
+        this.vista.getPuntaje().addActionListener(l -> cargarvistaUsuario());
     }
 
-//    public static viewPersona vp ;
-    public static viewCrearAdmin vp;
-    public static viewJuegos vps;
-    public static viewCuestionarios vu;
+    public static viewPersona vpd = null;
+    public static viewCrearAdmin vp = null;
+    public static viewJuegos vps = null;
+    public static viewCuestionarios vu = null;
 
     public void cargarvistaPersona() {
-        System.out.println("entro al evento");
-        //new Controller_admin(vp, manage, new PersonaJpaController(manage.getentityManagerFactory()), this.vista.getEscritorio());
-//        System.out.println("mensaje");
-        vp = new viewCrearAdmin();
-//        vista.Escritorio.add(vp);
-        vp.setVisible(true);
-
+        new Controller_admin_Crud(vp, manage, new PersonaJpaController(manage.getentityManagerFactory()), this.vista.getEscritorio());
+        System.out.println("mensaje");
     }
 
     public void cargarvistaProducto() {
-//        new ControllerProducto (vps, manage, new ProductoJpaController(manage.getentityManagerFactory()), this.vista.getEscritorio());
-//        System.out.println("mensaje");
 
     }
 
     public void cargarvistaUsuario() {
-//        new ControllerUsuario(vu, manage, new UsuarioJpaController(manage.getentityManagerFactory()), this.vista.getEscritorio());
-//        System.out.println("mensaje");
 
     }
 }
