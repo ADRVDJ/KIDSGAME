@@ -6,6 +6,8 @@
 package Vista;
 
 import javax.swing.JDesktopPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import kidsgames.ManagerFactory;
 
 
@@ -14,10 +16,57 @@ import kidsgames.ManagerFactory;
  * @author Shalva
  */
 public class viewMenuAdmin extends javax.swing.JFrame {
-    
-    
+
     public viewMenuAdmin() {
         initComponents();
+    }
+
+    public JMenuItem getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(JMenuItem admin) {
+        this.admin = admin;
+    }
+
+    public JMenuItem getEstu() {
+        return estu;
+    }
+
+    public void setEstu(JMenuItem estu) {
+        this.estu = estu;
+    }
+
+    public JMenu getJuego() {
+        return juego;
+    }
+
+    public void setJuego(JMenu juego) {
+        this.juego = juego;
+    }
+
+    public JMenuItem getProfe() {
+        return profe;
+    }
+
+    public void setProfe(JMenuItem profe) {
+        this.profe = profe;
+    }
+
+    public JMenu getPuntaje() {
+        return puntaje;
+    }
+
+    public void setPuntaje(JMenu puntaje) {
+        this.puntaje = puntaje;
+    }
+
+    public JMenu getRegistro() {
+        return registro;
+    }
+
+    public void setRegistro(JMenu registro) {
+        this.registro = registro;
     }
 
     public JDesktopPane getEscritorio() {
@@ -43,13 +92,13 @@ public class viewMenuAdmin extends javax.swing.JFrame {
         Escritorio = new javax.swing.JDesktopPane();
         jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        registro = new javax.swing.JMenu();
+        admin = new javax.swing.JMenuItem();
+        profe = new javax.swing.JMenuItem();
+        estu = new javax.swing.JMenuItem();
+        juego = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
+        puntaje = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -79,33 +128,33 @@ public class viewMenuAdmin extends javax.swing.JFrame {
 
         getContentPane().add(Escritorio, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1080, 670));
 
-        jMenu1.setText("Registro");
+        registro.setText("Registro");
 
-        jMenuItem1.setText("Administrador");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        admin.setText("Administrador");
+        admin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                adminActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        registro.add(admin);
 
-        jMenuItem2.setText("Profesor");
-        jMenu1.add(jMenuItem2);
+        profe.setText("Profesor");
+        registro.add(profe);
 
-        jMenuItem3.setText("Estudiante");
-        jMenu1.add(jMenuItem3);
+        estu.setText("Estudiante");
+        registro.add(estu);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(registro);
 
-        jMenu2.setText("Juegos");
+        juego.setText("Juegos");
 
         jMenuItem4.setText("Juego de memoria");
-        jMenu2.add(jMenuItem4);
+        juego.add(jMenuItem4);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(juego);
 
-        jMenu3.setText("Puntaje");
-        jMenuBar1.add(jMenu3);
+        puntaje.setText("Puntaje");
+        jMenuBar1.add(puntaje);
 
         setJMenuBar(jMenuBar1);
 
@@ -113,9 +162,9 @@ public class viewMenuAdmin extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void adminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_adminActionPerformed
 
     /**
      * @param args the command line arguments
@@ -123,14 +172,14 @@ public class viewMenuAdmin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane Escritorio;
+    private javax.swing.JMenuItem admin;
+    private javax.swing.JMenuItem estu;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenu juego;
+    private javax.swing.JMenuItem profe;
+    private javax.swing.JMenu puntaje;
+    private javax.swing.JMenu registro;
     // End of variables declaration//GEN-END:variables
 }

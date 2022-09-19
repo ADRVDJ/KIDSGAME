@@ -25,12 +25,12 @@ public class controladminVistas extends javax.swing.JFrame {
         this.manage = manage;
         this.vista.setExtendedState(MAXIMIZED_BOTH);
         controlEvento();
-        System.out.println("Hola cambio 1");
     }
 
     public void controlEvento() {
-//        this.vista.getBtnPersona().addActionListener(l -> cargarvistaPersona());
-
+        this.vista.geta.addActionListener(l -> cargarvistaPersona());
+        this.vista.getItemproducto().addActionListener(l -> cargarvistaProducto());
+        this.vista.getItemusuario().addActionListener(l -> cargarvistaUsuario());
     }
 
 //    public static viewPersona vp ;
