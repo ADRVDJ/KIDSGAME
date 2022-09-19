@@ -58,10 +58,10 @@ public class Puntaje_Juegos extends javax.swing.JInternalFrame {
         jTable1.setOpaque(false);
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 840, 380));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 110, 840, 380));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/NutriaTitulo.png"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 110, 590, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 70, 660, 650));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/games_gamepad_juego_12680.png"))); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));

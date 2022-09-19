@@ -8,7 +8,7 @@ package kidsgames;
 import Control.Controller_login;
 import Modelo.UsuarioJpaController;
 import Vista.viewLogindatos;
-import Vista.viewlogin;
+
 
 /**
  *

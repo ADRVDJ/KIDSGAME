@@ -23,14 +23,7 @@ public class viewLogindatos extends javax.swing.JFrame {
         initComponents();
     }
 
-    public JLabel getLbladmin() {
-        return lbladmin;
-    }
-
-    public void setLbladmin(JLabel lbladmin) {
-        this.lbladmin = lbladmin;
-    }
-    
+   
 //////////
     public JButton getBt_iniciar() {
         return bt_iniciar;
@@ -93,7 +86,6 @@ public class viewLogindatos extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
         txtcontraseñaLogin = new javax.swing.JPasswordField();
-        lbladmin = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         bt_salir = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -117,7 +109,6 @@ public class viewLogindatos extends javax.swing.JFrame {
         txtusuarioLogin.setBackground(new java.awt.Color(1, 190, 255));
         txtusuarioLogin.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txtusuarioLogin.setForeground(new java.awt.Color(0, 0, 0));
-        txtusuarioLogin.setText("Usuario");
         txtusuarioLogin.setToolTipText("");
         txtusuarioLogin.setBorder(null);
         jPanel2.add(txtusuarioLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 290, 349, 20));
@@ -153,12 +144,9 @@ public class viewLogindatos extends javax.swing.JFrame {
 
         txtcontraseñaLogin.setBackground(new java.awt.Color(1, 190, 255));
         txtcontraseñaLogin.setForeground(new java.awt.Color(0, 0, 0));
-        txtcontraseñaLogin.setText("jPasswordField1");
+        txtcontraseñaLogin.setText("123");
         txtcontraseñaLogin.setBorder(null);
         jPanel2.add(txtcontraseñaLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 400, 340, 30));
-
-        lbladmin.setText("administrador");
-        jPanel2.add(lbladmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 230, -1, -1));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 530, 700));
 
@@ -227,7 +215,6 @@ public class viewLogindatos extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JLabel lbladmin;
     private javax.swing.JPasswordField txtcontraseñaLogin;
     private javax.swing.JTextField txtusuarioLogin;
     // End of variables declaration//GEN-END:variables

@@ -5,11 +5,11 @@
  */
 package Control;
 
-import Interfaces.Lista_Estudiantes;
 import Modelo.Usuario;
 import Modelo.UsuarioJpaController;
-import Vista.ViewMenuEstudiante;
-import Vista.ViewMenuProfesor;
+import Vista.Estudiante.ViewMenuEstudiante;
+import Vista.Profesor.ViewMenuProfesor;
+
 import Vista.viewLogindatos;
 import Vista.viewMenuAdmin;
 import java.math.BigDecimal;
@@ -55,17 +55,17 @@ public class Controller_login {
             if (user != null && !usuario.equals("") || !contraseña.equals("")) {
                 System.out.println("entro al primer if");
                 switch (user.getUsIdRol().getRolNombre()) {
-                    case "Administrador":
+                    case "administrador":
                         viewMenuAdmin a = new viewMenuAdmin();
                         a.setVisible(true);
                         vista.setVisible(false);
                         break;
-                    case "Profesor":
+                    case "profesor":
                         ViewMenuProfesor p = new ViewMenuProfesor();
                         p.setVisible(true);
                         vista.setVisible(false);
                         break;
-                    case "Estudiante":
+                    case "estudiante":
                          ViewMenuEstudiante e = new ViewMenuEstudiante();
                         e.setVisible(true);
                         vista.setVisible(false);
