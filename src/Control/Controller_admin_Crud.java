@@ -25,6 +25,7 @@ public class Controller_admin_Crud {
     Usuario usuario;
     Persona persona;
     JDesktopPane panelEscritorio;
+    ModeloTablaAdmin modeloTablaAdmin;
 
     public Controller_admin_Crud(viewCrearAdmin vista, ManagerFactory manage, UsuarioJpaController modeloUsuario, JDesktopPane panelEscritorio) {
         this.manage = manage;
@@ -35,8 +36,8 @@ public class Controller_admin_Crud {
         if (controladminVistas.vp == null) {
 //            controladminVistas.vp = modeloPersona;
 //            this.vista = controladminVistas.vp;
-//            this.panelEscritorio.add(this.vista);
-//            this.vista.getTablausuario().setModel(modelotabla);
+            this.panelEscritorio.add(this.vista);
+            this.vista.getTablaadministrador().setModel(modeloTablaAdmin);
 
             this.vista.show();
             iniciarControl();
@@ -113,8 +114,8 @@ public class Controller_admin_Crud {
 //        Resouces.success("Atención!!", "USUARIO EDITADA CORECTAMENTE");
         try {
             modeloUsuario.edit(usuario);
-//            modelotabla.eliminar(usuario);
-//            modelotabla.actualizar(usuario);
+           modeloPersona.eliminar(usuario);
+           modelotabla.actualizar(usuario);
             limpiar();
         } catch (Exception ex) {
 
@@ -130,11 +131,11 @@ public class Controller_admin_Crud {
                 modeloUsuario.destroy(usuario.getIdUsuario());
                 limpiar();
             } catch (Exception ex) {
-//                Logger.getLogger(ControllerUsuario.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Controller_admin_Crud.class.getName()).log(Level.SEVERE, null, ex);
                 limpiar();
             }
-//            modelotabla.eliminar(usuario);
-            //  JOptionPane.showMessageDialog(panelEscritorio, "PERSONA ELIMINADA CORRECTAMENTE");
+            modeloTablaAdmin.eliminar(persona);
+            JOptionPane.showMessageDialog(panelEscritorio, "PERSONA ELIMINADA CORRECTAMENTE");
 //            Resouces.success("ALERTA!!", "USUARIO ELIMINADO CORECTAMENTE");
         }
     }
@@ -151,7 +152,7 @@ public class Controller_admin_Crud {
 
     public void usuarioSeleccionado() {
         if (this.vista.getTablaadministrador().getSelectedRow() != -1) {
-//            usuario = modelotabla.getFilas().get(this.vista.getTablausuario().getSelectedRow());
+            persona = modeloTablaAdmin.getFilas().get(this.vista.getTablaadministrador().getSelectedRow());
             this.vista.getTxtnombre().setText(persona.getPrNombre());
             this.vista.getTxtapellido().setText(persona.getPrApellido());
             this.vista.getGenerocbm().setSelectedItem(persona.getPrGenero());
@@ -166,8 +167,8 @@ public class Controller_admin_Crud {
 
     public void limpiarbuscador() {
         this.vista.getTxtBuscar().setText("");
-//        modelotabla.setFilas(modeloPersona.findUsuarioEntities());
-//        modelotabla.fireTableDataChanged();
+        modeloTablaAdmin.setFilas(modeloPersona.findPersonaEntities());
+        modeloTablaAdmin.fireTableDataChanged();
     }
 
 //    public void buscarusuario() {
