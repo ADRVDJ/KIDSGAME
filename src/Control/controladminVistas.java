@@ -5,9 +5,9 @@
  */
 package Control;
 
+import Vista.Administrador.viewCrearAdmin;
 import Vista.Subvista.viewCuestionarios;
 import Vista.Subvista.viewJuegos;
-import Vista.Subvista.viewPersona;
 import Vista.viewMenuAdmin;
 import kidsgames.ManagerFactory;
 
@@ -19,8 +19,6 @@ public class controladminVistas extends javax.swing.JFrame {
 
     viewMenuAdmin vista;
     ManagerFactory manage;
-    
-    
 
     public controladminVistas(viewMenuAdmin vista, ManagerFactory manage) {
         this.vista = vista;
@@ -31,21 +29,23 @@ public class controladminVistas extends javax.swing.JFrame {
     }
 
     public void controlEvento() {
-        this.vista.getBtnPersona().addActionListener(l -> cargarvistaPersona());
-  
+//        this.vista.getBtnPersona().addActionListener(l -> cargarvistaPersona());
+
     }
-    
-    public static viewPersona vp ;
-    public static viewJuegos vps ;
+
+//    public static viewPersona vp ;
+    public static viewCrearAdmin vp;
+    public static viewJuegos vps;
     public static viewCuestionarios vu;
 
     public void cargarvistaPersona() {
         System.out.println("entro al evento");
-      //new Controller_admin(vp, manage, new PersonaJpaController(manage.getentityManagerFactory()), this.vista.getEscritorio());
+        //new Controller_admin(vp, manage, new PersonaJpaController(manage.getentityManagerFactory()), this.vista.getEscritorio());
 //        System.out.println("mensaje");
-        vp=new viewPersona();
-        vista.Escritorio.add(vp);
+        vp = new viewCrearAdmin();
+//        vista.Escritorio.add(vp);
         vp.setVisible(true);
+
     }
 
     public void cargarvistaProducto() {

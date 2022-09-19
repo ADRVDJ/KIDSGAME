@@ -34,7 +34,7 @@ public class viewCrearAdmin extends javax.swing.JInternalFrame {
         this.admin = admin;
     }
 
-     public JButton getBtnBuscar() {
+    public JButton getBtnBuscar() {
         return BtnBuscar;
     }
 

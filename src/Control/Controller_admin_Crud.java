@@ -38,10 +38,8 @@ public class Controller_admin_Crud {
 //            this.vista = controladminVistas.vp;
             this.panelEscritorio.add(this.vista);
             this.vista.getTablaadministrador().setModel(modeloTablaAdmin);
-
             this.vista.show();
             iniciarControl();
-
             Dimension desktopSize = this.panelEscritorio.getSize();
             Dimension FrameSize = this.vista.getSize();
             this.vista.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
@@ -50,6 +48,10 @@ public class Controller_admin_Crud {
             controladminVistas.vu.show();
 
         }
+    }
+
+    Controller_admin_Crud() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public void iniciarControl() {
@@ -113,10 +115,10 @@ public class Controller_admin_Crud {
         usuario.setUsContraseña(this.vista.getTxtcontraseña().getText());
 //        Resouces.success("Atención!!", "USUARIO EDITADA CORECTAMENTE");
         try {
-            modeloUsuario.edit(usuario);
-           modeloUsuario.eliminar(usuario);
-           modelotabla.actualizar(usuario);
-            limpiar();
+//            modeloUsuario.edit(usuario);
+//           modeloUsuario.(usuario);
+//           modelotabla.actualizar(usuario);
+//            limpiar();
         } catch (Exception ex) {
 
             Logger.getLogger(Controller_admin_Crud.class.getName()).log(Level.SEVERE, null, ex);

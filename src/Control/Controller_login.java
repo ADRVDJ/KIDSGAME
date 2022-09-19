@@ -9,10 +9,8 @@ import Modelo.Usuario;
 import Modelo.UsuarioJpaController;
 import Vista.Estudiante.ViewMenuEstudiante;
 import Vista.Profesor.ViewMenuProfesor;
-
 import Vista.viewLogindatos;
 import Vista.viewMenuAdmin;
-import java.math.BigDecimal;
 import kidsgames.ManagerFactory;
 
 /**
@@ -27,7 +25,7 @@ public class Controller_login {
     private UsuarioJpaController modelo;
     ViewMenuProfesor profesor = new ViewMenuProfesor();
     viewMenuAdmin admin = new viewMenuAdmin();
-    ViewMenuEstudiante estudiante = new ViewMenuEstudiante();
+//    ViewMenuEstudiante estudiante = new ViewMenuEstudiante();
 
     public Controller_login(ManagerFactory manager, viewLogindatos vista, UsuarioJpaController modelo) {
         this.manager = manager;
@@ -59,7 +57,7 @@ public class Controller_login {
                         viewMenuAdmin a = new viewMenuAdmin();
                         a.setVisible(true);
                         vista.setVisible(false);
-                        controladminVistas contolAdmin=new controladminVistas(a, manager);
+                        controladminVistas contolAdmin = new controladminVistas(a, manager);
                         break;
                     case "profesor":
                         ViewMenuProfesor p = new ViewMenuProfesor();
@@ -67,7 +65,7 @@ public class Controller_login {
                         vista.setVisible(false);
                         break;
                     case "estudiante":
-                         ViewMenuEstudiante e = new ViewMenuEstudiante();
+                        ViewMenuEstudiante e = new ViewMenuEstudiante();
                         e.setVisible(true);
                         vista.setVisible(false);
 

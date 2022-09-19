@@ -5,52 +5,29 @@
  */
 package Vista;
 
-import javax.swing.JButton;
 import javax.swing.JDesktopPane;
+import kidsgames.ManagerFactory;
+
 
 /**
  *
  * @author Shalva
  */
 public class viewMenuAdmin extends javax.swing.JFrame {
-
-    /**
-     * Creates new form viewMenuAdmin
-     */
+    
+    
     public viewMenuAdmin() {
         initComponents();
     }
-    public JButton getBtnPersona() {
-        return BtnPersonas;
-    }
 
-    public void setBtnPersona(JButton BtnPersona) {
-        this.BtnPersonas = BtnPersona;
-    }
-
-    public static JDesktopPane getEscritorio() {
+    public JDesktopPane getEscritorio() {
         return Escritorio;
     }
 
-    public static void setEscritorio(JDesktopPane Escritorio) {
-        viewMenuAdmin.Escritorio = Escritorio;
+    public void setEscritorio(JDesktopPane Escritorio) {
+        this.Escritorio = Escritorio;
     }
-
-    public JButton getBtnCuestionario() {
-        return btnCuestionario;
-    }
-
-    public void setBtnCuestionario(JButton btnCuestionario) {
-        this.btnCuestionario = btnCuestionario;
-    }
-
-    public JButton getBtnJuegos() {
-        return btnJuegos;
-    }
-
-    public void setBtnJuegos(JButton btnJuegos) {
-        this.btnJuegos = btnJuegos;
-    }
+  
 
     
 
@@ -63,147 +40,97 @@ public class viewMenuAdmin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jdViewPersona = new javax.swing.JDialog();
-        btnRegCrearAdmins = new javax.swing.JButton();
-        btnRegProfes = new javax.swing.JButton();
-        btnRegEstud = new javax.swing.JButton();
-        btnCrudEstud = new javax.swing.JButton();
-        btnCrudProf = new javax.swing.JButton();
-        btnCrudAdmin = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
-        jLabel2 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        BtnPersonas = new javax.swing.JButton();
-        btnJuegos = new javax.swing.JButton();
-        btnCuestionario = new javax.swing.JButton();
-        btnSalir = new javax.swing.JButton();
         Escritorio = new javax.swing.JDesktopPane();
-        jLabel3 = new javax.swing.JLabel();
-
-        jdViewPersona.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        btnRegCrearAdmins.setBackground(new java.awt.Color(255, 153, 153));
-        btnRegCrearAdmins.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/user-add-free-icon-font.png"))); // NOI18N
-        jdViewPersona.getContentPane().add(btnRegCrearAdmins, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 70, 140, 120));
-
-        btnRegProfes.setBackground(new java.awt.Color(255, 153, 153));
-        btnRegProfes.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        btnRegProfes.setForeground(new java.awt.Color(51, 0, 0));
-        btnRegProfes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/man-head-free-icon-font.png"))); // NOI18N
-        btnRegProfes.setText("+");
-        jdViewPersona.getContentPane().add(btnRegProfes, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 260, 140, 120));
-
-        btnRegEstud.setBackground(new java.awt.Color(255, 153, 153));
-        btnRegEstud.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        btnRegEstud.setForeground(new java.awt.Color(51, 0, 0));
-        btnRegEstud.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/child-head-free-icon-font.png"))); // NOI18N
-        btnRegEstud.setText("+");
-        jdViewPersona.getContentPane().add(btnRegEstud, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 460, 140, 120));
-
-        btnCrudEstud.setBackground(new java.awt.Color(255, 153, 153));
-        btnCrudEstud.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        btnCrudEstud.setForeground(new java.awt.Color(102, 0, 0));
-        btnCrudEstud.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/child-head-free-icon-font.png"))); // NOI18N
-        btnCrudEstud.setText("🖊");
-        jdViewPersona.getContentPane().add(btnCrudEstud, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 460, 140, 120));
-
-        btnCrudProf.setBackground(new java.awt.Color(255, 153, 153));
-        btnCrudProf.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        btnCrudProf.setForeground(new java.awt.Color(102, 0, 0));
-        btnCrudProf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/man-head-free-icon-font.png"))); // NOI18N
-        btnCrudProf.setText("🖊");
-        jdViewPersona.getContentPane().add(btnCrudProf, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 260, 140, 120));
-
-        btnCrudAdmin.setBackground(new java.awt.Color(255, 153, 153));
-        btnCrudAdmin.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        btnCrudAdmin.setForeground(new java.awt.Color(102, 0, 0));
-        btnCrudAdmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/user-free-icon-font.png"))); // NOI18N
-        btnCrudAdmin.setText("🖊");
-        jdViewPersona.getContentPane().add(btnCrudAdmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 70, 140, 120));
-
-        jSeparator1.setBackground(new java.awt.Color(255, 153, 153));
-        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jdViewPersona.getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 0, 20, 670));
-
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/fondochido.gif"))); // NOI18N
-        jdViewPersona.getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-130, 0, 1090, 670));
+        jLabel1 = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel1.setBackground(new java.awt.Color(8, 189, 255));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        BtnPersonas.setBackground(new java.awt.Color(255, 153, 153));
-        BtnPersonas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/users-free-icon-font.png"))); // NOI18N
-        BtnPersonas.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel1.add(BtnPersonas, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 110, 100));
-
-        btnJuegos.setBackground(new java.awt.Color(255, 153, 153));
-        btnJuegos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/gamepad-free-icon-font.png"))); // NOI18N
-        btnJuegos.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel1.add(btnJuegos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 230, 110, 100));
-
-        btnCuestionario.setBackground(new java.awt.Color(255, 153, 153));
-        btnCuestionario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/books-free-icon-font.png"))); // NOI18N
-        btnCuestionario.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel1.add(btnCuestionario, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 110, 100));
-
-        btnSalir.setBackground(new java.awt.Color(255, 153, 153));
-        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/exit-free-icon-font.png"))); // NOI18N
-        btnSalir.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 490, 110, 100));
-
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 120, 700));
 
         Escritorio.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/NutriaTitulo.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/NutriaTitulo.png"))); // NOI18N
 
-        Escritorio.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        Escritorio.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout EscritorioLayout = new javax.swing.GroupLayout(Escritorio);
         Escritorio.setLayout(EscritorioLayout);
         EscritorioLayout.setHorizontalGroup(
             EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(EscritorioLayout.createSequentialGroup()
-                .addGap(150, 150, 150)
-                .addComponent(jLabel3))
+                .addGap(181, 181, 181)
+                .addComponent(jLabel1)
+                .addContainerGap(249, Short.MAX_VALUE))
         );
         EscritorioLayout.setVerticalGroup(
             EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(EscritorioLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel3))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EscritorioLayout.createSequentialGroup()
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addContainerGap())
         );
 
-        getContentPane().add(Escritorio, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 960, 700));
+        getContentPane().add(Escritorio, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1080, 670));
+
+        jMenu1.setText("Registro");
+
+        jMenuItem1.setText("Administrador");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem2.setText("Profesor");
+        jMenu1.add(jMenuItem2);
+
+        jMenuItem3.setText("Estudiante");
+        jMenu1.add(jMenuItem3);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Juegos");
+
+        jMenuItem4.setText("Juego de memoria");
+        jMenu2.add(jMenuItem4);
+
+        jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("Puntaje");
+        jMenuBar1.add(jMenu3);
+
+        setJMenuBar(jMenuBar1);
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BtnPersonas;
-    public static javax.swing.JDesktopPane Escritorio;
-    private javax.swing.JButton btnCrudAdmin;
-    private javax.swing.JButton btnCrudEstud;
-    private javax.swing.JButton btnCrudProf;
-    private javax.swing.JButton btnCuestionario;
-    private javax.swing.JButton btnJuegos;
-    private javax.swing.JButton btnRegCrearAdmins;
-    private javax.swing.JButton btnRegEstud;
-    private javax.swing.JButton btnRegProfes;
-    private javax.swing.JButton btnSalir;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JDialog jdViewPersona;
+    private javax.swing.JDesktopPane Escritorio;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     // End of variables declaration//GEN-END:variables
 }
