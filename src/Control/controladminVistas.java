@@ -37,7 +37,7 @@ public class controladminVistas extends javax.swing.JFrame {
 
     public void cargarvistaPersona() {
         Controller_admin_Crud controller_admin_Crud = new Controller_admin_Crud(vp, manage, new  PersonaJpaController(manage.getentityManagerFactory()), this.vista.getEscritorio());
-        System.out.println("mensaje");
+        System.out.println("mensaje yes");
     }
 
     public void cargarvistaProducto() {
