@@ -16,7 +16,7 @@ import kidsgames.ManagerFactory;
  * @author ASUS TUF GAMING
  */
 public class controladminVistas extends javax.swing.JFrame {
-viewPersona vistaPer;
+
     viewMenuAdmin vista;
     ManagerFactory manage;
     
@@ -40,13 +40,12 @@ viewPersona vistaPer;
     public static viewCuestionarios vu;
 
     public void cargarvistaPersona() {
-//        new Controller_admin(vp, manage, new PersonaJpaController(manage.getentityManagerFactory()), this.vista.getEscritorio());
+        System.out.println("entro al evento");
+      //new Controller_admin(vp, manage, new PersonaJpaController(manage.getentityManagerFactory()), this.vista.getEscritorio());
 //        System.out.println("mensaje");
-
-        vista.Escritorio.add(vistaPer);
-        vistaPer.toFront();
-        vistaPer.setVisible(true);
-
+        vp=new viewPersona();
+        vista.Escritorio.add(vp);
+        vp.setVisible(true);
     }
 
     public void cargarvistaProducto() {

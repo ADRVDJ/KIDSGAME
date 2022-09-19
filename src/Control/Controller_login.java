@@ -59,6 +59,7 @@ public class Controller_login {
                         viewMenuAdmin a = new viewMenuAdmin();
                         a.setVisible(true);
                         vista.setVisible(false);
+                        controladminVistas contolAdmin=new controladminVistas(a, manager);
                         break;
                     case "profesor":
                         ViewMenuProfesor p = new ViewMenuProfesor();

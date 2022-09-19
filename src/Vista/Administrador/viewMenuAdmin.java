@@ -20,13 +20,12 @@ public class viewMenuAdmin extends javax.swing.JFrame {
     public viewMenuAdmin() {
         initComponents();
     }
-
     public JButton getBtnPersona() {
-        return BtnPersona;
+        return BtnPersonas;
     }
 
     public void setBtnPersona(JButton BtnPersona) {
-        this.BtnPersona = BtnPersona;
+        this.BtnPersonas = BtnPersona;
     }
 
     public static JDesktopPane getEscritorio() {
@@ -74,7 +73,7 @@ public class viewMenuAdmin extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        BtnPersona = new javax.swing.JButton();
+        BtnPersonas = new javax.swing.JButton();
         btnJuegos = new javax.swing.JButton();
         btnCuestionario = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
@@ -136,10 +135,10 @@ public class viewMenuAdmin extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(8, 189, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        BtnPersona.setBackground(new java.awt.Color(255, 153, 153));
-        BtnPersona.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/users-free-icon-font.png"))); // NOI18N
-        BtnPersona.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel1.add(BtnPersona, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 110, 100));
+        BtnPersonas.setBackground(new java.awt.Color(255, 153, 153));
+        BtnPersonas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/users-free-icon-font.png"))); // NOI18N
+        BtnPersonas.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel1.add(BtnPersonas, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 110, 100));
 
         btnJuegos.setBackground(new java.awt.Color(255, 153, 153));
         btnJuegos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/gamepad-free-icon-font.png"))); // NOI18N
@@ -159,10 +158,25 @@ public class viewMenuAdmin extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 120, 700));
 
         Escritorio.setBackground(new java.awt.Color(255, 255, 255));
-        Escritorio.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/NutriaTitulo.png"))); // NOI18N
-        Escritorio.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 20, -1, -1));
+
+        Escritorio.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout EscritorioLayout = new javax.swing.GroupLayout(Escritorio);
+        Escritorio.setLayout(EscritorioLayout);
+        EscritorioLayout.setHorizontalGroup(
+            EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(EscritorioLayout.createSequentialGroup()
+                .addGap(150, 150, 150)
+                .addComponent(jLabel3))
+        );
+        EscritorioLayout.setVerticalGroup(
+            EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(EscritorioLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel3))
+        );
 
         getContentPane().add(Escritorio, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 960, 700));
 
@@ -175,7 +189,7 @@ public class viewMenuAdmin extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BtnPersona;
+    private javax.swing.JButton BtnPersonas;
     public static javax.swing.JDesktopPane Escritorio;
     private javax.swing.JButton btnCrudAdmin;
     private javax.swing.JButton btnCrudEstud;
