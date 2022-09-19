@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import kidsgames.ManagerFactory;
 
 /**
@@ -55,16 +56,16 @@ public class Controller_admin_Crud {
         this.vista.getBtnRegistrar().addActionListener(l -> guardarUsuario());
         this.vista.getBtnEditar().addActionListener(l -> editarUsuario());
         this.vista.getBtnEliminar().addActionListener(l -> eliminarUsuario());
-//        this.vista.getTablausuario().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//        listaUsernaModel = this.vista.getTablausuario().getSelectionModel();
-//        listaUsernaModel.addListSelectionListener(new ListSelectionListener() {
-//            public void valueChanged(ListSelectionEvent e) {
-//                if (!e.getValueIsAdjusting()) {
-//                    usuarioSeleccionado();
-//                }
-//            }
-//
-//        });
+        this.vista.getTablaadministrador().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listaUsernaModel = this.vista.getTablausuario().getSelectionModel();
+        listaUsernaModel.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    usuarioSeleccionado();
+                }
+            }
+
+        });
 
         this.vista.getBtnEliminar().setEnabled(false);
         this.vista.getBtnEditar().setEnabled(false);
@@ -90,8 +91,9 @@ public class Controller_admin_Crud {
             usuario.setUsPermisos(this.vista.getAdmin().getText());
             modeloPersona.create(persona);
             modeloUsuario.create(usuario);
-//        modelotabla.agregar(usuario);
-//Resouces.success("Atención!!", "USUARIO GUARDADA CORECTAMENTE");
+            modeloTablaAdmin.agregar(persona);
+
+            Resouces.success("Atención!!", "USUARIO GUARDADA CORECTAMENTE");
             JOptionPane.showMessageDialog(panelEscritorio, "PERSONA CREADA CORRECTAMENTE");
             limpiar();
         } catch (Exception ex) {
